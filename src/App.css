@@ -6,6 +6,10 @@
   height: 40vmin;
   pointer-events: none;
 }
+.App-LoginForm {
+  vertical-align: middle;
+  margin-top:40px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
