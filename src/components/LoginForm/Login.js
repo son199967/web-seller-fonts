@@ -1,58 +1,55 @@
-import React, {useState} from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
+ import axios from 'axios';
 import './LoginForm.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiContants';
 import { withRouter } from "react-router-dom";
-
-function LoginForm(props) {
-    const [state , setState] = useState({
-        email : "",
-        password : "",
-        successMessage: null
-    })
-    const handleChange = (e) => {
-        const {id , value} = e.target   
-        setState(prevState => ({
-            ...prevState,
-            [id] : value
-        }))
+ class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          password: null,
+          email:null,
+          check:null,
+          successMessage:null
+        };
+      }
+    handleChange = (e,name) => {
+        this.setState({
+            [name]:e.target.value,
+        });
     }
-
-    const handleSubmitClick = (e) => {
-        e.preventDefault();
+     redirectToRegister = () => {
+         console.log("/register")
+        this.props.history.push('/register'); 
+    }
+    redirectToHome = () => {
+        this.props.history.push('/home');
+    }
+    handleSubmitClick = (e) => {
+        console.log("aaa"+this.state.email+"bbb"+this.state.password);
         const payload={
-            "email":state.email,
-            "password":state.password,
+            "email":this.state.email,
+            "password":this.state.password,
         }
         axios.post(API_BASE_URL+'/login', payload)
             .then(function (response) {
                 if(response.status === 200){
-                    setState(prevState => ({
-                        ...prevState,
-                        'successMessage' : 'Login successful. Redirecting to home page..'
-                    }))
+                 alert("Dang nhap thanh cong");
                     localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
-                    redirectToHome();
-                    props.showError(null)
+                    this.redirectToHome();
                 }
                 else if(response.code === 401){
-                    props.showError("Username and password do not match");
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
-    const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
-    }
-    const redirectToRegister = () => {
-        props.history.push('/register'); 
-        props.updateTitle('Register');
-    }
-    return(
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center ">
+
+      
+      render(){
+          return(
+            <div className="card col-12 col-lg-4 login-card mt-2 hv-center ">
             <form>
                 <div className="form-group text-left pt-5">
                 <label htmlFor="exampleInputEmail1">Email address</label>
@@ -61,8 +58,8 @@ function LoginForm(props) {
                        id="email" 
                        aria-describedby="emailHelp" 
                        placeholder="Enter email" 
-                       value={state.email}
-                       onChange={handleChange}
+                       value={this.state.email}
+                       onChange={e => this.handleChange(e,"email")}
                 />
                 <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
@@ -72,8 +69,8 @@ function LoginForm(props) {
                        className="form-control" 
                        id="password" 
                        placeholder="Password"
-                       value={state.password}
-                       onChange={handleChange} 
+                       value={this.state.password}
+                       onChange={e => this.handleChange(e,"password")} 
                 />
                 </div>
                 <div className="form-check">
@@ -81,18 +78,19 @@ function LoginForm(props) {
                 <button 
                     type="submit" 
                     className="btn btn-primary"
-                    onClick={handleSubmitClick}
+                    onClick={this.handleSubmitClick}
                 >Submit</button>
             </form>
-            <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
-                {state.successMessage}
+            <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
+                {this.state.successMessage}
             </div>
             <div className="registerMessage">
                 <span>Dont have an account? </span>
-                <span className="loginText" onClick={() => redirectToRegister()}>Register</span> 
+                <span className="loginText" onClick={() => this.redirectToRegister()}>Register</span> 
             </div>
         </div>
-    )
-}
+          )
+      }
 
-export default withRouter(LoginForm);
+}
+export default withRouter(Login);

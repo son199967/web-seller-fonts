@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import { ACCESS_TOKEN_NAME } from '../../constants/apiContants';
+import { API_BASE_URL } from '../../constants/apiContants';
 function Header(props) {
     const capitalize = (s) => {
         if (typeof s !== 'string') return ''

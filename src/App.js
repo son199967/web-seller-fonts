@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import Header from './components/Header/Header';
-import LoginForm from './components/LoginForm/LoginForm';
+import Login from './components/LoginForm/Login';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
 import {
@@ -19,13 +19,13 @@ function App() {
       <Header title={title}/>
         <div className="container d-flex align-items-center flex-column App-LoginForm">
           <Switch>
-            <Route path="/register">
+            <Route path="/register" component={RegistrationForm}>
               <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
-            <Route path="/login">
-              <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
+            <Route path="/login" component={Login}>
+              <Login showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
-            <Route path="/">
+            <Route path="/" component={Home}>
               <Home/>
             </Route>
           </Switch>

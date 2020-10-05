@@ -1,69 +1,67 @@
-import React, {useState} from 'react';
+import React, { Component } from 'react'
 import axios from 'axios';
 import './RegistrationForm.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiContants';
 import { withRouter } from "react-router-dom";
 
-function RegistrationForm(props) {
-    const [state , setState] = useState({
-        email : "",
-        password : "",
-        confirmPassword: "",
-        successMessage: null
-    })
-    const handleChange = (e) => {
-        const {id , value} = e.target   
-        setState(prevState => ({
-            ...prevState,
-            [id] : value
-        }))
+class RegistrationForm extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+          password: null,
+          email:null,
+          confirmPassword:null,
+          successMessage:null
+        };
+      }
+   
+    handleCChange = (e,name) => {
+        this.setState({
+            [name]:e.target.value,
+        });
     }
-    const sendDetailsToServer = () => {
-        if(state.email.length && state.password.length) {
-            props.showError(null);
+    redirectToHome = () => {
+        this.props.history.push('/');
+    }
+     sendDetailsToServer = () => {
+         console.log("legin"+this.state.email.length);
+        if(this.state.email.length && this.state.password.length) {
             const payload={
-                "email":state.email,
-                "password":state.password,
+                "email":this.state.email,
+                "password":this.state.password,
             }
             axios.post(API_BASE_URL+'/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
-                        setState(prevState => ({
-                            ...prevState,
-                            'successMessage' : 'Registration successful. Redirecting to home page..'
-                        }))
+                        alert("Dang ki thanh cong");
                         localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
                         console.log("token :"+response.data.token);
-                        redirectToHome();
-                        props.showError(null)
+                        this.redirectToHome();
                     } else{
-                        props.showError("Some error ocurred");
+                        console.log("error");
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
                 });    
         } else {
-            props.showError('Please enter valid username and password')    
+            this.props.showError('Please enter valid username and password')    
         }
         
     }
-    const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
+     
+     redirectToLogin = () => {
+       this.props.history.push('/login'); 
     }
-    const redirectToLogin = () => {
-        props.updateTitle('Login')
-        props.history.push('/login'); 
-    }
-    const handleSubmitClick = (e) => {
-        e.preventDefault();
-        if(state.password === state.confirmPassword) {
-            sendDetailsToServer()    
+      handleSubmitClick = () => {
+          console.log("aaa"+this.state.password+"bb"+this.state.confirmPassword);
+        if(this.state.password === this.state.confirmPassword) {
+            this.sendDetailsToServer()    ;
         } else {
-            props.showError('Passwords do not match');
+            console.log("Passwords do not match");
         }
     }
+    render(){
     return(
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
             <form>
@@ -74,8 +72,8 @@ function RegistrationForm(props) {
                        id="email" 
                        aria-describedby="emailHelp" 
                        placeholder="Enter email" 
-                       value={state.email}
-                       onChange={handleChange}
+                       value={this.state.email}
+                       onChange={e => this.handleCChange(e,"email")}
                 />
                 <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
@@ -85,8 +83,8 @@ function RegistrationForm(props) {
                         className="form-control" 
                         id="password" 
                         placeholder="Password"
-                        value={state.password}
-                        onChange={handleChange} 
+                        value={this.state.password}
+                        onChange={e => this.handleCChange(e,"password")} 
                     />
                 </div>
                 <div className="form-group text-left">
@@ -95,28 +93,29 @@ function RegistrationForm(props) {
                         className="form-control" 
                         id="confirmPassword" 
                         placeholder="Confirm Password"
-                        value={state.confirmPassword}
-                        onChange={handleChange} 
+                        value={this.state.confirmPassword}
+                        onChange={e => this.handleCChange(e,"confirmPassword")} 
                     />
                 </div>
                 <button 
                     type="submit" 
                     className="btn btn-primary"
-                    onClick={handleSubmitClick}
+                    onClick={this.handleSubmitClick}
                 >
                     Register
                 </button>
             </form>
-            <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
-                {state.successMessage}
+            <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
+                {this.state.successMessage}
             </div>
             <div className="mt-2">
                 <span>Already have an account? </span>
-                <span className="loginText" onClick={() => redirectToLogin()}>Login here</span> 
+                <span className="loginText" onClick={() => this.redirectToLogin()}>Login here</span> 
             </div>
             
         </div>
     )
+    }
 }
 
 export default withRouter(RegistrationForm);
