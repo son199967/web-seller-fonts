@@ -17,7 +17,7 @@ function App() {
     <Router>
     <div className="App">
       <Header title={title}/>
-        <div className="container d-flex align-items-center flex-column App-LoginForm">
+        <div>
           <Switch>
             <Route path="/register" component={RegistrationForm}>
               <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
