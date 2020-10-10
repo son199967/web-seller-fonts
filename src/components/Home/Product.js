@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 class Product extends Component {
   constructor(props) {
     super(props);
   }
+  sendData (a) {
+    this.props.productDetail(a);
+    }
+  
 
   render() {
     console.log("datax :" + this.props.newProduct.productName);
     const listItems = this.props.newProduct.map((a) =>
-      <div class="product col-md-3">
-        <div class="product-img">
+      <div class="product col-md-3" >
+       
+        <div class="product-img" onClick={() =>this.sendData(a)} >
           <img src={a.imageProduct} alt=""></img>
           <div class="product-label">
             <span class="sale">-30%</span>

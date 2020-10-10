@@ -8,18 +8,21 @@ import Head from '../../components/Head/Head';
 import HotDeal from '../../components/Home/HotDeal';
 import CategoryDetail from '../../components/Home/CategoryDetail';
 import CateDete from '../../components/Home/CateDete';
-
-
-
-
-
+import ProductDetail from './ProductDetail';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       newProduct: [],
       topProduct: [],
-      adsProduct: []
+      adsProduct: [],
+      productDetailCheck: false,
+      productDetail: [],
     };
   }
   componentWillMount() {
@@ -51,23 +54,43 @@ class Home extends Component {
         console.log(error);
       });
   }
+  callbackFunction = (childData) => {
+    this.setState({
+      productDetail: childData,
+      productDetailCheck:true
+    
+    })
+   }
+    
   render() {
-    return (
-      <body>
-                <Head />
-       <Category  class="row" />
-        <div class="container">
+    if (this.state.productDetailCheck) {
+      return (
 
-       <CateDete />
-       <CategoryDetail title={"New Product"} />
-       <Product newProduct={this.state.newProduct}  class="row"/>      
-       <HotDeal class ="row" />
-       <CategoryDetail title={"TOP SELLING"} />
-       <Product newProduct={this.state.topProduct}  class="row"/>   
-       </div>
-      </body>
-     
-    )
+        <body>
+         <Head />
+         <Category  class="row" />
+          <div class="container">
+         <ProductDetail productDetail={this.state.productDetail}/>
+         </div>
+        </body>)
+    }else{
+      console.log("check:"+this.state.productDetailCheck)
+      return (
+        <body>
+         <Head />
+         <Category  class="row" />
+          <div class="container">
+         <CateDete />
+         <CategoryDetail title={"New Product"} />
+         <Product newProduct={this.state.newProduct} productDetail = {this.callbackFunction} class="row"/>      
+         <HotDeal class ="row" />
+         <CategoryDetail title={"TOP SELLING"} />
+         <Product newProduct={this.state.topProduct} productDetail = {this.callbackFunction} class="row"/>   
+         </div>
+        </body>
+       
+      )
+    }
   }
 }
 
