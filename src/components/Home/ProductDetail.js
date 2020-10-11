@@ -4,9 +4,47 @@ import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
 class ProductDetail extends Component {
   constructor(props) {
-    super(props);
+	super(props);
+	this.state = {
+		productDetail :{},
+		prices:[]
+		// {id:null, productName:"", productInfo:"", productType:"", imageProduct:"", providerName:"", prices:[], promotions:[], productDetail:null}
+	  };
   }
+  handleChange = (e,name) => {
+	this.setState({
+		[name]:e.target.value,
+	});
+}
 
+callApi() {
+	// const apiUrl = API_BASE_URL+'/product/getProductById/'+this.props.match.params.id;
+	// fetch(apiUrl)
+	// .then((response) => response.json())
+	// .then((data) => this.setState({productDetail:data}));
+	// console.log("data"+this.state.productDetail)
+	axios.get(API_BASE_URL+'/product/getProductById/'+this.props.match.params.id)
+	.then( (response) => {
+		if(response.status === 200){
+		console.log("datares "+response.data.prices);
+		// const productDetail =response.data
+		this.setState({
+			productDetail: response.data,
+			prices: response.data.prices
+		})
+		}
+		else if(response.code === 401){
+		}
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
+
+}
+
+ componentDidMount = () => {
+        this.callApi();
+ }
   render() {
     return (
       <div class="section">
@@ -47,7 +85,7 @@ class ProductDetail extends Component {
 					</div>
 					<div class="col-md-5">
 						<div class="product-details">
-             	<h2 class="product-name">{this.props.productDetail.productName}</h2>
+             	<h2 class="product-name">{this.state.productDetail.productName}</h2>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>
@@ -56,7 +94,7 @@ class ProductDetail extends Component {
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star-o"></i>
 								</div>
-								<a  href={this.props.productDetail.imageProduct} class="review-link">10 Review(s) | Add your review</a>
+								<a  href={this.state.productDetail.imageProduct} class="review-link">10 Review(s) | Add your review</a>
 							</div>
 							<div>
 								<h3 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h3>

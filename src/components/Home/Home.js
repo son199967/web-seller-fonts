@@ -63,34 +63,57 @@ class Home extends Component {
    }
     
   render() {
-    if (this.state.productDetailCheck) {
-      return (
-
+    return(
+      <Router>
         <body>
          <Head />
          <Category  class="row" />
           <div class="container">
-         <ProductDetail productDetail={this.state.productDetail}/>
+         <Switch>
+           <Route path="/detail/:id" component={ProductDetail} >
+             <ProductDetail />
+          </Route>   
+          <Route path="/" >
+          <CateDete />
+          <CategoryDetail title={"New Product"} />
+          <Product newProduct={this.state.newProduct}  class="row"/>      
+          <HotDeal class ="row" />
+          <CategoryDetail title={"TOP SELLING"} />
+          <Product newProduct={this.state.topProduct}  class="row"/>  
+          </Route>   
+         </Switch>
          </div>
         </body>)
-    }else{
-      console.log("check:"+this.state.productDetailCheck)
-      return (
-        <body>
-         <Head />
-         <Category  class="row" />
-          <div class="container">
-         <CateDete />
-         <CategoryDetail title={"New Product"} />
-         <Product newProduct={this.state.newProduct} productDetail = {this.callbackFunction} class="row"/>      
-         <HotDeal class ="row" />
-         <CategoryDetail title={"TOP SELLING"} />
-         <Product newProduct={this.state.topProduct} productDetail = {this.callbackFunction} class="row"/>   
-         </div>
-        </body>
+      </Router>
+    )
+    // if (this.state.productDetailCheck) {
+    //   return (
+
+    //     <body>
+    //      <Head />
+    //      <Category  class="row" />
+    //       <div class="container">
+    //      <ProductDetail productDetail={this.state.productDetail}/>
+    //      </div>
+    //     </body>)
+    // }else{
+    //   console.log("check:"+this.state.productDetailCheck)
+    //   return (
+    //     <body>
+    //      <Head />
+    //      <Category  class="row" />
+    //       <div class="container">
+    //      <CateDete />
+    //      <CategoryDetail title={"New Product"} />
+    //      <Product newProduct={this.state.newProduct} productDetail = {this.callbackFunction} class="row"/>      
+    //      <HotDeal class ="row" />
+    //      <CategoryDetail title={"TOP SELLING"} />
+    //      <Product newProduct={this.state.topProduct} productDetail = {this.callbackFunction} class="row"/>   
+    //      </div>
+    //     </body>
        
-      )
-    }
+    //   )
+    // }
   }
 }
 

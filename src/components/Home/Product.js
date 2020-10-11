@@ -8,7 +8,8 @@ class Product extends Component {
     super(props);
   }
   sendData (a) {
-    this.props.productDetail(a);
+    console.log("aa"+a);
+    this.props.history.push(`/detail/${a}`);
     }
   
 
@@ -16,8 +17,7 @@ class Product extends Component {
     console.log("datax :" + this.props.newProduct.productName);
     const listItems = this.props.newProduct.map((a) =>
       <div class="product col-md-3" >
-       
-        <div class="product-img" onClick={() =>this.sendData(a)} >
+        <div class="product-img" onClick={() =>this.sendData(a.id)} >
           <img src={a.imageProduct} alt=""></img>
           <div class="product-label">
             <span class="sale">-30%</span>
