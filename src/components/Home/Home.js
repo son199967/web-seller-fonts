@@ -8,7 +8,11 @@ import Head from '../../components/Head/Head';
 import HotDeal from '../../components/Home/HotDeal';
 import CategoryDetail from '../../components/Home/CategoryDetail';
 import CateDete from '../../components/Home/CateDete';
+import Cart from '../../components/Home/Cart';
 import ProductDetail from './ProductDetail';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,8 +22,22 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newProduct: [],
-      topProduct: [],
+      newProduct: [
+        {
+          id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
+         prices:[  	{unitPrice:null}], 
+         promotions:[{ amount:null} ], 
+		 productDetail:null
+        }
+      ],
+      topProduct: [
+        {
+          id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
+         prices:[  	{unitPrice:0}], 
+         promotions:[{ amount:0} ], 
+		 productDetail:null
+        }
+      ],
       adsProduct: [],
       productDetailCheck: false,
       productDetail: [],
@@ -31,28 +49,33 @@ class Home extends Component {
   }
 
 
-  getAllProduction = (e) => {
-    console.log("aaa" + this.state.email + "bbb" + this.state.password);
-    const payload = {
-      "email": this.state.email,
-      "password": this.state.password,
-    }
+  getAllProduction = async() => {
 
-    var self = this;
-    axios.get(API_BASE_URL + '/product/getAllProduct', payload)
+  
+     const newProduct = await  axios.get(API_BASE_URL + '/product/getAllProduct')
       .then(function (response) {
-        console.log("response:" + response.data);
+        console.log("response:" , response.data);
         if (response.status === 200) {
-          response.data.map((a) => console.log(a.productName));
-          self.setState({ newProduct: response.data });
-          self.setState({ topProduct: response.data });
-        }
-        else if (response.code === 401) {
+          return response.data
         }
       })
       .catch(function (error) {
         console.log(error);
       });
+      const topProduct = await  axios.get(API_BASE_URL + '/product/getAllProduct')
+      .then(function (response) {
+        console.log("response:" , response.data);
+        if (response.status === 200) {
+          return response.data
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      this.setState({
+        newProduct:newProduct,
+        topProduct:topProduct
+      })
   }
   callbackFunction = (childData) => {
     this.setState({
@@ -63,16 +86,18 @@ class Home extends Component {
    }
     
   render() {
+    console.log("newProduct",this.state.newProduct)
     return(
       <Router>
         <body>
-         <Head />
+        
          <Category  class="row" />
           <div class="container">
          <Switch>
            <Route path="/detail/:id" component={ProductDetail} >
              <ProductDetail />
           </Route>   
+          
           <Route path="/" >
           <CateDete />
           <CategoryDetail title={"New Product"} />

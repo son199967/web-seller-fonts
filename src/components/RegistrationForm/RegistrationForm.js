@@ -30,14 +30,16 @@ class RegistrationForm extends Component{
                 "email":this.state.email,
                 "password":this.state.password,
             }
+            var self=this;
             axios.post(API_BASE_URL+'/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         alert("Dang ki thanh cong");
                         localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
                         console.log("token :"+response.data.token);
-                        this.redirectToHome();
+                        self.props.history.push('/')
                     } else{
+                        alert("Dang ki That bai");
                         console.log("error");
                     }
                 })

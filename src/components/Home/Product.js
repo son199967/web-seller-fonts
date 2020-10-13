@@ -11,11 +11,34 @@ class Product extends Component {
     console.log("aa"+a);
     this.props.history.push(`/detail/${a}`);
     }
+    addProductToCart(id){
+    
+    }
+      callAPIAdd = async (a) => {
+        const user = await axios.post(API_BASE_URL+'/cart/createCart',{ headers: {
+         authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+        }})
+            .then(function (response) {
+                if(response.status === 200){
+                  alert("Thêm Thành Công Sản Phẩm giỏ hàng")
+                  return null
+                }
+                else {
+                  alert("Đã có lỗi xảy ra");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            return null
+    }    
+    
   
 
   render() {
-    console.log("datax :" + this.props.newProduct.productName);
+    console.log("dataxx:" , this.props.newProduct);
     const listItems = this.props.newProduct.map((a) =>
+       
       <div class="product col-md-3" >
         <div class="product-img" onClick={() =>this.sendData(a.id)} >
           <img src={a.imageProduct} alt=""></img>
@@ -25,25 +48,24 @@ class Product extends Component {
           </div>
         </div>
         <div class="product-body">
-          <p class="product-category">Category</p>
-          <h3 class="product-name"><a href="#">{a.productName}</a></h3>
-          <h4 class="product-price">{a.prices.unitPrice} <del class="product-old-price">{a.prices.unitPrice}</del></h4>
-          <div class="product-rating">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
+        <div class="product-rating">
+            <i class="fa fa-star">*</i>
+            <i class="fa fa-star">*</i>
+            <i class="fa fa-star">*</i>
+            <i class="fa fa-star">*</i>
+            <i class="fa fa-star">*</i>
           </div>
-          <div class="product-btns">
+          <h3 class="product-name"><a href="#">{a.productName}</a></h3>
+          <h4 class="product-price">{a.prices[0].unitPrice}đ <del class="product-old-price">{a.prices[0].unitPrice}đ</del></h4>
+          {/* <div class="product-btns">
             <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
             <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
             <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-          </div>
+          </div> */}
         </div>
-        <div class="add-to-cart">
+        {/* <div class="add-to-cart">
           <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-        </div>
+        </div> */}
       </div>
     );
     return (

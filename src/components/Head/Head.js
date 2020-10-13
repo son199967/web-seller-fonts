@@ -1,16 +1,69 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
+import axios from 'axios';
 
 class Head extends Component {
+    constructor(props) {
+        super(props);
+        this.state={
+         sizeF:0,
+         sizeD:0
+        }
+      }
+      componentDidMount(){
+        console.log("dm")
+          this.getCartDone()
+      }
+
+    getCartDone = async () => {
+       
+        const sizeD = await axios.get(API_BASE_URL+'/cart/getCartDone',{ headers: {
+         authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+        }})
+            .then(function (response) {
+                if(response.status === 200){
+                    console.log("size",response.data.length)
+                  return response.data.length
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        const sizeF = await axios.get(API_BASE_URL+'/cart/getCartFuture',{ headers: {
+                authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+               }})
+                   .then(function (response) {
+                       if(response.status === 200){
+                           console.log("sizeF",response.data.cartItems.length)
+                         return response.data.cartItems.length
+                       }
+                   })
+                   .catch(function (error) {
+                       console.log(error);
+                   });
+                   this.setState({
+                       sizeF:sizeF,
+                       sizeD:sizeD
+                   })
+        
+    }
+    redirectToHome = () => {
+        this.props.history.push("/")
+    }
+    redirectToCart = () => {
+        this.props.history.push("/cart")
+    }
 render() {
+    console.log("logm",this.state.sizeF)
  return(
     <div id="header">
         <div class="container">
-            
             <div class="row">
                 <div class="col-md-3">
                     <div class="header-logo">
                         <a href="#" class="logo">
-                            <img src="./img/logo.png" alt=""></img>
+                            <img src="./img/logo.png" onClick={this.redirectToHome} alt=""></img>
                         </a>
                     </div>
                 </div>
@@ -32,18 +85,25 @@ render() {
                     <div class="header-ctn">
                     
                         <div>
-                            <a href="#">
-                                <i class="fa fa-heart-o"></i>
-                                <span>Your Wishlist</span>
-                                <div class="qty">2</div>
+                            <a href="#" onClick={() =>this.redirectToCart()}>
+                                <i className="fa fa-heart-o"></i>
+                                <span>Giỏ Hàng</span>
+                             <div class="qty">{this.state.sizeF}</div>
                             </a>
                         </div>
+                        {/* <div>
+                            <a href="#">
+                                <i class="fa fa-heart-o"></i>
+                                <span>Your Cart</span>
+                             <div class="qty">{this.state.sizeF}</div>
+                            </a>
+                        </div> */}
                     
-                        <div class="dropdown">
+                        {/* <div class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Your Cart</span>
-                                <div class="qty">3</div>
+                            <div class="qty">{}</div>
                             </a>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
@@ -79,7 +139,7 @@ render() {
                                 </div>
                             </div>
                         </div>
-                
+                 */}
                         <div class="menu-toggle">
                             <a href="#">
                                 <i class="fa fa-bars"></i>
@@ -94,4 +154,4 @@ render() {
  )
 }
 }
-export default Head;
+export default withRouter(Head);

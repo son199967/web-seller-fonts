@@ -6,46 +6,107 @@ class ProductDetail extends Component {
   constructor(props) {
 	super(props);
 	this.state = {
-		productDetail :{},
-		prices:[]
-		// {id:null, productName:"", productInfo:"", productType:"", imageProduct:"", providerName:"", prices:[], promotions:[], productDetail:null}
+		product :{
+		 id:null, 
+		 productName:"",
+		 productInfo:"", 
+		 productType:"", 
+		 imageProduct:"",
+		  providerName:"", 
+		 prices:[
+			{
+				unitPrice:null
+			}
+		 ], 
+		 promotions:[
+			 {amount:null}
+		 ], 
+		 productDetail :{
+			content:"",
+			discription:"",
+			color:[],
+			size:[],
+			images:[]
+		}
+		},
+		cartIteam:{
+			id:null,
+			productId:this.props.match.params.id,
+			amount:1,
+			size:null,
+			color:null,
+		} 
+
+       
+
 	  };
   }
+  handleChangeObj = (e,name) => {
+	  console.log("itea:",e.target.value)
+	  const {cartIteam} =this.state
+	this.setState({
+      cartIteam:{
+		  ...cartIteam,
+		  [name]:e.target.value
+	  }
+	});
+}
   handleChange = (e,name) => {
 	this.setState({
 		[name]:e.target.value,
 	});
 }
+addProductToCart = () => {
+	axios.post(API_BASE_URL+'/cart/createCart/',this.state.cartIteam,{ headers: {
+		Authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+	   }})
+	  .then( function(response) {
+		  if(response.status === 200){
+		   alert("Thêm Thành công sản phẩm giỏ hàng")
+		  }else {
+			  alert("Có lỗi xảy ra")
+		  }
+	  })
+	  .catch(function (error) {
+		  console.log(error);
+	  });
+	  
+  }
 
-callApi() {
-	// const apiUrl = API_BASE_URL+'/product/getProductById/'+this.props.match.params.id;
-	// fetch(apiUrl)
-	// .then((response) => response.json())
-	// .then((data) => this.setState({productDetail:data}));
-	// console.log("data"+this.state.productDetail)
-	axios.get(API_BASE_URL+'/product/getProductById/'+this.props.match.params.id)
-	.then( (response) => {
+getProductById = async() => {
+  const product = await axios.get(API_BASE_URL+'/product/getProductById/'+this.props.match.params.id)
+	.then( function(response) {
 		if(response.status === 200){
-		console.log("datares "+response.data.prices);
-		// const productDetail =response.data
-		this.setState({
-			productDetail: response.data,
-			prices: response.data.prices
-		})
+		console.log("ashajs",response.data)
+         return response.data;
 		}
-		else if(response.code === 401){
+		else {
+			alert("Có lỗi xảy ra")
 		}
 	})
 	.catch(function (error) {
 		console.log(error);
 	});
-
+	console.log("product",product)
+	this.setState({product})
 }
 
  componentDidMount = () => {
-        this.callApi();
+        this.getProductById();
  }
   render() {
+	  const size = this.state.product.productDetail.size.map((s) =>
+	  <option value={s}>{s}</option>
+	  ) 
+	  const color = this.state.product.productDetail.color.map((s) =>
+	  <option value={s}>{s}</option>
+	  ) 
+	  const images = this.state.product.productDetail.images.map((s) =>
+	  <div class="product-preview">
+	  <img src={s} alt="" />
+         </div>
+	  )
+	  console.log("cartItem",this.state.cartIteam)
     return (
       <div class="section">
 			<div class="container">
@@ -54,38 +115,22 @@ callApi() {
 					<div class="col-md-5 col-md-push-2">
 						<div id="product-main-img">
 							<div class="product-preview">
-								<img src="./img/product01.png" alt="" />
+								<img src={this.state.product.imageProduct} alt="" />
 							</div>
-							<div class="product-preview">
-								<img src="./img/product06.png" alt="" />
-							</div>
-							<div class="product-preview">
-								<img src="./img/product08.png" alt="" />
-							</div>
+							{images}
 						</div>
 					</div>
 					<div class="col-md-2  col-md-pull-5">
 						<div id="product-imgs">
-							<div class="product-preview">
-								<img src="./img/product01.png" alt="" />
+						    <div class="product-preview">
+								<img src={this.state.product.imageProduct} alt="" />
 							</div>
-
-							<div class="product-preview">
-								<img src="./img/product03.png" alt="" />
-							</div>
-
-							<div class="product-preview">
-								<img src="./img/product06.png" alt="" />
-							</div>
-
-							<div class="product-preview">
-								<img src="./img/product08.png" alt="" />
-							</div>
+							{images}
 						</div>
 					</div>
 					<div class="col-md-5">
 						<div class="product-details">
-             	<h2 class="product-name">{this.state.productDetail.productName}</h2>
+             	<h2 class="product-name">{this.state.product.productName}</h2>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>
@@ -94,40 +139,39 @@ callApi() {
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star-o"></i>
 								</div>
-								<a  href={this.state.productDetail.imageProduct} class="review-link">10 Review(s) | Add your review</a>
+								<a  href="#" class="review-link">10 Review(s) | Add your review</a>
 							</div>
 							<div>
-								<h3 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h3>
+								<h3 class="product-price">{this.state.product.prices[0].unitPrice} VND <del class="product-old-price">{this.state.product.prices[0].unitPrice} VND</del></h3>
 								<span class="product-available">In Stock</span>
 							</div>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                         	<p>{this.state.product.productDetail.content}</p>
 
 							<div class="product-options">
 								<label>
 									Size
-									<select class="input-select">
-										<option value="0">X</option>
+									<select class="input-select" value={this.state.cartIteam.size} onChange={(e) =>this.handleChangeObj(e,"size")}>
+										{size}
 									</select>
 								</label>
 								<label>
-									Color
-									<select class="input-select">
-										<option value="0">Red</option>
+								<select class="input-select" value={this.state.cartIteam.color} onChange={(e) => this.handleChangeObj(e,"color")}>
+										{color}
 									</select>
 								</label>
 							</div>
 
 							<div class="add-to-cart">
 								<div class="qty-label">
-									Qty
+								AMOUNT
 									<div class="input-number">
-										<input type="number"></input>
-										<span class="qty-up">+</span>
+										<input type="number" value={this.state.cartIteam.amount} onChange={(e => this.handleChangeObj(e,"amount"))}></input>
+										<span class="qty-up" >+</span>
 										<span class="qty-down">-</span>
                     
 									</div>
 								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+								<button class="add-to-cart-btn" type="submit" onClick={() =>this.addProductToCart()}><i class="fa fa-shopping-cart"></i> add to cart</button>
 							</div>
 
 							<ul class="product-btns">

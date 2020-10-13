@@ -31,12 +31,13 @@ import { withRouter } from "react-router-dom";
             "email":this.state.email,
             "password":this.state.password,
         }
+        var self =this;
         axios.post(API_BASE_URL+'/login', payload)
             .then(function (response) {
                 if(response.status === 200){
                  alert("Dang nhap thanh cong");
                     localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
-                    this.redirectToHome();
+                    self.props.history.push("/")
                 }
                 else if(response.code === 401){
                 }
@@ -53,7 +54,7 @@ import { withRouter } from "react-router-dom";
             <div className="card col-12 col-lg-4 login-card mt-2 hv-center ">
             <form>
                 <div className="form-group text-left pt-5">
-                <label htmlFor="exampleInputEmail1">Email address</label>
+                <label htmlFor="exampleInputEmail1">Email address</label> 
                 <input type="email" 
                        className="form-control" 
                        id="email" 

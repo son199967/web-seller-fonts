@@ -1,6 +1,6 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
-import { API_BASE_URL } from '../../constants/apiContants';
+import { Route , withRouter} from 'react-router-dom';
+import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 function Header(props) {
     const capitalize = (s) => {
         if (typeof s !== 'string') return ''
@@ -10,15 +10,6 @@ function Header(props) {
     if(props.location.pathname === '/') {
         title = 'Welcome'
     }
-    // function renderLogout() {
-    //     if(props.location.pathname === '/home'){
-    //         return(
-    //             <div className="ml-auto">
-    //                 <button className="btn btn-danger" onClick={() => handleLogout()}>Logout</button>
-    //             </div>
-    //         )
-    //     }
-    // }
     function loginForm() {
         props.history.push('/login')
 	}
@@ -28,6 +19,44 @@ function Header(props) {
 	function register() {
         props.history.push('/register')
     }
+    function myaccount() {
+        props.history.push('/myaccount')
+    }
+    function logout() {
+       localStorage.setItem(ACCESS_TOKEN_NAME,null)
+       props.history.push('/')
+    }
+    function hasLogin() {
+        return <ul class="header-links pull-right">
+        <li><a href="#" onClick={myaccount}><i class="fa fa-sign-in"></i>MyAccount</a></li>
+        <li><a href="#" onClick={logout}><i class="fa fa-sign-in"></i>Logout</a></li>
+
+    </ul>;
+    }
+    function hasLogout() {
+       return <ul class="header-links pull-right">
+       <li><a href="#" onClick={register}><i class="fa fa-sign-in"></i>Đăng Kí</a></li>
+       <li><a href="#" onClick={loginForm}><i class="fa fa-user-o"></i> Đăng Nhập</a></li>
+   </ul>;
+    }
+    function checklogin() {
+        const checkLoginK=localStorage.getItem(ACCESS_TOKEN_NAME);
+        console.log("localk",checkLoginK);
+       if(checkLoginK==="null"||checkLoginK===null){
+        return <ul class="header-links pull-right">
+       <li><a href="#" onClick={register}><i class="fa fa-sign-in"></i>Đăng Kí</a></li>
+       <li><a href="#" onClick={loginForm}><i class="fa fa-user-o"></i> Đăng Nhập</a></li>
+         </ul>;  
+       }
+       return <ul class="header-links pull-right">
+        <li><a href="#" onClick={myaccount}><i class="fa fa-sign-in"></i>MyAccount</a></li>
+        <li><a href="#" onClick={logout}><i class="fa fa-sign-in"></i>Logout</a></li>
+
+    </ul>;
+
+      
+     }
+
     return(
         // <nav className="navbar navbar-dark bg-primary">
         //     <div className ="row col-12 d-flex justify-content-center text-white">
@@ -38,6 +67,7 @@ function Header(props) {
         //         {renderLogout()}
         //     </div>
         // </nav>
+
         <header>
             <div id="top-header">
 				<div class="container">
@@ -46,10 +76,7 @@ function Header(props) {
 						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
 						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
 					</ul>
-					<ul class="header-links pull-right">
-						<li><a href="#" onClick={register}><i class="fa fa-sign-in"></i>Đăng Kí</a></li>
-						<li><a href="#" onClick={loginForm}><i class="fa fa-user-o"></i> Đăng Nhập</a></li>
-					</ul>
+					{checklogin()}
 				</div>
 </div>
 </header>
