@@ -65,7 +65,11 @@ class RegistrationForm extends Component{
     }
     render(){
     return(
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+        <div className="container mt-5">
+            <div className="col-lg-4">
+
+            </div>
+        <div className="card col-12 col-lg-4 login-card mt-5 hv-center">
             <form>
                 <div className="form-group text-left">
                 <label htmlFor="exampleInputEmail1">Email address</label>
@@ -115,6 +119,7 @@ class RegistrationForm extends Component{
                 <span className="loginText" onClick={() => this.redirectToLogin()}>Login here</span> 
             </div>
             
+        </div>
         </div>
     )
     }

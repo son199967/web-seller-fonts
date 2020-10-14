@@ -10,7 +10,9 @@ import CategoryDetail from '../../components/Home/CategoryDetail';
 import CateDete from '../../components/Home/CateDete';
 import Cart from '../../components/Home/Cart';
 import ProductDetail from './ProductDetail';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from '../../components/Home/Footer'
+
+
 
 
 import {
@@ -18,6 +20,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import ProductCategory from './ProductCategory';
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -94,10 +97,13 @@ class Home extends Component {
          <Category  class="row" />
           <div class="container">
          <Switch>
+  
            <Route path="/detail/:id" component={ProductDetail} >
              <ProductDetail />
           </Route>   
-          
+          <Route path="/product/:category" component={ProductCategory} >
+             <ProductCategory />
+          </Route>      
           <Route path="/" >
           <CateDete />
           <CategoryDetail title={"New Product"} />
@@ -108,7 +114,9 @@ class Home extends Component {
           </Route>   
          </Switch>
          </div>
-        </body>)
+        </body>
+        <Footer />
+        )
       </Router>
     )
     // if (this.state.productDetailCheck) {

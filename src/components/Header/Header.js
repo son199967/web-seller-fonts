@@ -27,30 +27,30 @@ function Header(props) {
        props.history.push('/')
     }
     function hasLogin() {
-        return <ul class="header-links pull-right">
-        <li><a href="#" onClick={myaccount}><i class="fa fa-sign-in"></i>MyAccount</a></li>
-        <li><a href="#" onClick={logout}><i class="fa fa-sign-in"></i>Logout</a></li>
+        return <ul className="header-links pull-right">
+        <li><a href="#" onClick={myaccount}><i className="fa fa-sign-in"></i>MyAccount</a></li>
+        <li><a href="#" onClick={logout}><i className="fa fa-sign-in"></i>Logout</a></li>
 
     </ul>;
     }
     function hasLogout() {
-       return <ul class="header-links pull-right">
-       <li><a href="#" onClick={register}><i class="fa fa-sign-in"></i>Đăng Kí</a></li>
-       <li><a href="#" onClick={loginForm}><i class="fa fa-user-o"></i> Đăng Nhập</a></li>
+       return <ul className="header-links pull-right">
+       <li><a href="#" onClick={register}><i className="fa fa-sign-in"></i>Đăng Kí</a></li>
+       <li><a href="#" onClick={loginForm}><i className="fa fa-user-o"></i> Đăng Nhập</a></li>
    </ul>;
     }
     function checklogin() {
         const checkLoginK=localStorage.getItem(ACCESS_TOKEN_NAME);
         console.log("localk",checkLoginK);
        if(checkLoginK==="null"||checkLoginK===null){
-        return <ul class="header-links pull-right">
-       <li><a href="#" onClick={register}><i class="fa fa-sign-in"></i>Đăng Kí</a></li>
-       <li><a href="#" onClick={loginForm}><i class="fa fa-user-o"></i> Đăng Nhập</a></li>
+        return <ul className="header-links pull-right">
+       <li><a href="#" onClick={register}><i className="fa fa-sign-in"></i>Đăng Kí</a></li>
+       <li><a href="#" onClick={loginForm}><i className="fa fa-user-o"></i> Đăng Nhập</a></li>
          </ul>;  
        }
-       return <ul class="header-links pull-right">
-        <li><a href="#" onClick={myaccount}><i class="fa fa-sign-in"></i>MyAccount</a></li>
-        <li><a href="#" onClick={logout}><i class="fa fa-sign-in"></i>Logout</a></li>
+       return <ul className="header-links pull-right">
+        <li><a href="#" onClick={myaccount}><i className="fa fa-sign-in"></i>MyAccount</a></li>
+        <li><a href="#" onClick={logout}><i className="fa fa-sign-in"></i>Logout</a></li>
 
     </ul>;
 
@@ -70,11 +70,11 @@ function Header(props) {
 
         <header>
             <div id="top-header">
-				<div class="container">
-					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+				<div className="container">
+					<ul className="header-links pull-left">
+						<li><a href="#"><i className="fa fa-phone"></i> +021-95-51-84</a></li>
+						<li><a href="#"><i className="fa fa-envelope-o"></i> email@email.com</a></li>
+						<li><a href="#"><i className="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
 					</ul>
 					{checklogin()}
 				</div>

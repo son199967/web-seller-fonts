@@ -6,25 +6,28 @@ class Category extends Component {
   constructor(props) {
     super(props);
   }
+  redirectTo=(e)=>{
+     this.props.history.push(`/product/${e}`)
+  }
 
   render() {
     return (
     <nav class="navbar navbar-expand-sm bg-danger navbar-light">
       <ul class="navbar-nav">
     <li class="nav-item active">
-      <a class="nav-link" href="#">Home</a>
+      <a class="nav-link" href="#" onClick={() =>this.redirectTo("/")}>Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Hot Deals</a>
+      <a class="nav-link" href="#" onClick={() =>this.redirectTo("hotdeal")}>Hot Deals</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Categories</a>
+      <a class="nav-link" href="#" onClick={() =>this.redirectTo("category")}>Categories</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Laptops</a>
+      <a class="nav-link" href="#" onClick={() =>this.redirectTo("laptop")}>Laptops</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Smartphones</a>
+      <a class="nav-link" href="#"onClick={() =>this.redirectTo("phone")}>Smartphones</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Cameras</a>

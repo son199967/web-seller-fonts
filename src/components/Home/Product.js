@@ -39,24 +39,24 @@ class Product extends Component {
     console.log("dataxx:" , this.props.newProduct);
     const listItems = this.props.newProduct.map((a) =>
        
-      <div class="product col-md-3" >
-        <div class="product-img" onClick={() =>this.sendData(a.id)} >
+      <div className="product col-3" >
+        <div className="product-img" onClick={() =>this.sendData(a.id)} >
           <img src={a.imageProduct} alt=""></img>
-          <div class="product-label">
-            <span class="sale">-30%</span>
-            <span class="new">NEW</span>
+          <div className="product-label">
+            <span className="sale">-30%</span>
+            <span className="new">NEW</span>
           </div>
         </div>
-        <div class="product-body">
-        <div class="product-rating">
-            <i class="fa fa-star">*</i>
-            <i class="fa fa-star">*</i>
-            <i class="fa fa-star">*</i>
-            <i class="fa fa-star">*</i>
-            <i class="fa fa-star">*</i>
+        <div className="product-body">
+        <div className="product-rating">
+            <i className="fa fa-star"></i>
+            <i className="fa fa-star"></i>
+            <i className="fa fa-star"></i>
+            <i className="fa fa-star"></i>
+            <i className="fa fa-star"></i>
           </div>
-          <h3 class="product-name"><a href="#">{a.productName}</a></h3>
-          <h4 class="product-price">{a.prices[0].unitPrice}đ <del class="product-old-price">{a.prices[0].unitPrice}đ</del></h4>
+          <h3 className="product-name"><a href="#">{a.productName}</a></h3>
+          <h4 className="product-price">{a.prices[0].unitPrice}đ <del class="product-old-price">{a.prices[0].unitPrice}đ</del></h4>
           {/* <div class="product-btns">
             <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
             <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
@@ -69,13 +69,13 @@ class Product extends Component {
       </div>
     );
     return (
-      <div class="col-md-12">
-        <div class="row">
-          <div class="products-tabs">
-            <div id="tab1" class="tab-pane active">
-              <div class="products-slick" data-nav="#slick-nav-1">
+      <div className="col-md-12">
+        <div className="row">
+          <div className="products-tabs">
+            <div id="tab1" className="tab-pane active">
+              <div className="products-slick row" data-nav="#slick-nav-1">
                 {listItems}
-                <div id="slick-nav-1" class="products-slick-nav"></div>
+                <div id="slick-nav-1" className="products-slick-nav"></div>
               </div>
             </div>
           </div>

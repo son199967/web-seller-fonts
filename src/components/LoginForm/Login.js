@@ -50,8 +50,13 @@ import { withRouter } from "react-router-dom";
       
       render(){
           return(
-              
-            <div className="card col-12 col-lg-4 login-card mt-2 hv-center ">
+              <div className="container">
+
+            
+              <div className="col-lg-4">
+
+              </div>
+            <div className="card  col-lg-4 login-card mt-5 hv-center ">
             <form>
                 <div className="form-group text-left pt-5">
                 <label htmlFor="exampleInputEmail1">Email address</label> 
@@ -81,7 +86,7 @@ import { withRouter } from "react-router-dom";
                     type="submit" 
                     className="btn btn-primary"
                     onClick={this.handleSubmitClick}
-                >Submit</button>
+                >Đăng Nhập</button>
             </form>
             <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
                 {this.state.successMessage}
@@ -91,6 +96,8 @@ import { withRouter } from "react-router-dom";
                 <span className="loginText" onClick={() => this.redirectToRegister()}>Register</span> 
             </div>
         </div>
+        </div>
+        
           )
       }
 

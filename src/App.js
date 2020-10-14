@@ -7,7 +7,11 @@ import Login from './components/LoginForm/Login';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
 import Cart from './components/Home/Cart';
-import MyAccount from './components/Home/MyAccount'
+import MyAccount from './components/Home/MyAccount';
+import Admin from './components/Admin/Admin';
+import 'font-awesome/css/font-awesome.min.css';
+import './style.css';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,23 +24,35 @@ function App() {
   return (
     <Router>
     <div className="App">
-      <Header title={title}/>
-      <Head />
+      
         <div >
           <Switch>
-          <Route path="/cart" component={Cart} >
+             <Route path="/cart" component={Cart} >
+             <Header title={title}/>
+             <Head />
              <Cart />
-          </Route>   
+            </Route>   
+            <Route path="/admin" component={Admin}>
+              <Admin />
+            </Route>
             <Route path="/register" component={RegistrationForm}>
+            <Header title={title}/>
+            <Head />
               <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
             <Route path="/login" component={Login}>
+            <Header title={title}/>
+            <Head />
               <Login showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
             <Route path="/myaccount" component={MyAccount}>
+            <Header title={title}/>
+             <Head /> 
               <MyAccount showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
             <Route path="/" component={Home}>
+            <Header title={title}/>
+            <Head />
               <Home/>
             </Route>
 

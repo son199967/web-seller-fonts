@@ -19,6 +19,7 @@ import { withRouter } from "react-router-dom";
                     image:null,
                     nameProduct:null,
                     price:null,
+                    totalPriceItem:null
                 }
             ]
           }
@@ -73,7 +74,7 @@ import { withRouter } from "react-router-dom";
               <td data-th="Price">{c.price} đ</td> 
               <td data-th="Quantity"><input class="form-control text-center" value={c.amount} type="number"/>
               </td> 
-              <td data-th="Subtotal" class="text-center"></td> 
+              <td data-th="Subtotal" class="text-center">{c.totalPriceItem} </td> 
               <td class="actions" data-th="">
                <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
                </button> 
@@ -83,14 +84,16 @@ import { withRouter } from "react-router-dom";
              </tr> 
           )
           return(
-              
-            <div class="container"> 
+           
+            <div class="container "> 
+            <div class="col-sm-12">
+             <h4 class="mt-5">Gỏ Hàng <span>{this.state.cart.cartItems.length} sản phẩm</span></h4>
             <table id="cart" class="table table-hover table-condensed"> 
              <thead> 
               <tr> 
-               <th  class="col-sm-6">Tên sản phẩm</th> 
+               <th  class="col-sm-5">Tên sản phẩm</th> 
                <th  class="col-sm-1">Giá</th> 
-               <th  class="col-sm-1">Số lượng</th> 
+               <th  class="col-sm-2">Số lượng</th> 
                <th class="text-center col-sm-2">Thành tiền</th> 
                <th  class="col-sm-2"> </th> 
               </tr> 
@@ -114,7 +117,13 @@ import { withRouter } from "react-router-dom";
    </tr> 
   </tfoot> 
  </table>
+ </div>
+ <div class="col-sm-4 mt-5">
+   
+ 
+  </div>
 </div>
+      
           )
       }
 

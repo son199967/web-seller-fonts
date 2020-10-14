@@ -8,13 +8,20 @@ class Head extends Component {
         super(props);
         this.state={
          sizeF:0,
-         sizeD:0
+         sizeD:0,
+         search:null
         }
+
       }
       componentDidMount(){
         console.log("dm")
           this.getCartDone()
       }
+      handleCChange = (e,name) => {
+        this.setState({
+            [name]:e.target.value,
+        });
+    }
 
     getCartDone = async () => {
        
@@ -51,44 +58,55 @@ class Head extends Component {
     redirectToHome = () => {
         this.props.history.push("/")
     }
+    redirectToOrder = () => {
+        const searchX=this.state.search;
+        console.log("seacrch",searchX);
+        this.props.history.push(`/product/${searchX}`);
+    }
     redirectToCart = () => {
+        console.log("ahahah",localStorage.getItem(ACCESS_TOKEN_NAME)==="null")
+        if (localStorage.getItem(ACCESS_TOKEN_NAME)==="null") {
+            alert("Bạn Phải Đăng Nhập")
+            this.props.history.push("/login")
+        }else{
         this.props.history.push("/cart")
+        }
     }
 render() {
     console.log("logm",this.state.sizeF)
  return(
     <div id="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="header-logo">
-                        <a href="#" class="logo">
+        <div className="container">
+            <div className="row">
+                <div className="col-md-3">
+                    <div className="header-logo">
+                        <a href="#" className="logo">
                             <img src="./img/logo.png" onClick={this.redirectToHome} alt=""></img>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="header-search">
+                <div className="col-md-6">
+                    <div className="header-search">
                         <form>
-                            <select class="input-select">
+                            <select className="input-select">
                                 <option value="0">All Categories</option>
                                 <option value="1">Category 01</option>
                                 <option value="1">Category 02</option>
                             </select>
-                            <input class="input" placeholder="Search here"></input>
-                            <button class="search-btn">Search</button>
+                            <input className="input" placeholder="Search here" value={this.state.search} onChange={(e) =>this.handleCChange(e,"search")}></input>
+                            <button className="search-btn" value="submit" onClick={() =>this.redirectToOrder()}>Search</button>
                         </form>
                     </div>
                 </div>
             
-                <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
+                <div className="col-md-3 clearfix">
+                    <div className="header-ctn">
                     
                         <div>
                             <a href="#" onClick={() =>this.redirectToCart()}>
-                                <i className="fa fa-heart-o"></i>
+                                <i className="fa fa-shopping-cart"></i>
                                 <span>Giỏ Hàng</span>
-                             <div class="qty">{this.state.sizeF}</div>
+                             <div className="qty">{this.state.sizeF}</div>
                             </a>
                         </div>
                         {/* <div>
@@ -140,9 +158,9 @@ render() {
                             </div>
                         </div>
                  */}
-                        <div class="menu-toggle">
+                        <div className="menu-toggle">
                             <a href="#">
-                                <i class="fa fa-bars"></i>
+                                <i className="fa fa-bars"></i>
                                 <span>Menu</span>
                             </a>
                         </div>
