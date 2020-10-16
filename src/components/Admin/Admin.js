@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Router, Switch } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
 import styles from './Admin.css';
 import jQuery from 'jquery';
+import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import { Button } from 'bootstrap';
+import ProductAdmin from './ProductAdmin'
 
 
 
@@ -11,133 +15,149 @@ class Admin extends Component {
     constructor(props) {
         super(props);
         this.state={
-
+          content:"HELLO"
         }
     }
+    handleCChange = () => {
+      this.setState({
+          content:"home"
+      });
+  }
+//   componentDidMount(){
+//      if(localStorage.getItem(ACCESS_TOKEN_NAME)!=="null"){
+//         const a= this.callAPI();
+//         if(a !==200){
+//             localStorage.setItem(ACCESS_TOKEN_NAME,null);
+//             alert("Bạn không phải là admin");
+//             this.props.history.push("/login");
+//             return;
+//         }
+//         this.props.history.push("/admin");
+//         return;     
+//      }else{
+//      this.props.history.push("/login");
+//      }
+//   }
+  callAPI = async (e) => {
+    console.log("aaa"+this.state.email+"bbb"+this.state.password);
+    const user = await axios.get(API_BASE_URL+'/infoUser',{ headers: {
+     authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+    }})
+        .then(function (response) {
+            if(response.status === 200){
+              return response.status
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        return user;
+}
+check =() =>{
+    console.log("admin",this.state.content)
+    if(this.state.content==="home"){
+            return <h1>Home</h1>
+    }else if(this.state.content==="productsList"){
+        return <ProductAdmin />
+    }
+    return <h2>AHIHI</h2>
+}
+       
     render(){
+        
+     
+      console.log("ajdh",this.state.content);
+      const styleH= {  backgroundColor: 'black',color: 'red'};
         return(
-        <body>
-		
-            <div className="wrapper d-flex align-items-stretch">
-                <nav id="sidebar" class="bg-dark">
-                    <div class="p-4 pt-5">
-                      <a href="#" class="img logo rounded-circle mb-5" ></a>
-                      <ul className="list-unstyled components mb-5">
-                      <li className="active">
-                      <a href="#"><i className="fa fa-home fa-2x"></i> Tổng quan</a>
-                  </li>
-                  <li >
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle "> Đơn hàng</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li>
-                        <a href="#">Danh sách đơn Hàng</a>
-                    </li>
-                    <li>
-                        <a href="#">Khách Trả hàng</a>
-                    </li>
-                    </ul>
-                  </li>
-                 
-
-                  <li>
-                  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span className="far fa-boxes"></span>Vận Chuyển</a>
-                  <ul class="collapse list-unstyled" id="home">
-                    <li>
-                        <a href="#">Tổng quan</a>
-                    </li>
-                    <li>
-                        <a href="#">Quản lý giao hàng</a>
-                    </li>
-                    <li>
-                        <a href="#">Đối tác</a>
-                    </li>
-                  </ul>
-                  </li>
-                  <li>
-                  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span className="far fa-boxes"></span>Khách Hàng</a>
-                  <ul class="collapse list-unstyled" id="page">
-                    <li>
-                        <a href="#">Tổng quan</a>
-                    </li>
-                    <li>
-                        <a href="#">Khách hàng</a>
-                    </li>
-                  </ul>
-                  </li>
-                  <li>
-                  <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span className="far fa-boxes"></span>Sản phẩm</a>
-                  <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
-                        <a href="#">Danh sách sản phẩm</a>
-                    </li>
-                    <li>
-                        <a href="#">Quản lý kho</a>
-                    </li>
-                    <li>
-                        <a href="#">Nhập hàng</a>
-                    </li>
-                    <li>
-                        <a href="#">Kiểm hàng</a>
-                    </li>
-                    <li>
-                        <a href="#">Điều chỉnh giá</a>
-                    </li>
-                    <li>
-                        <a href="#">Chương trình Khuyến mại</a>
-                    </li>
-                  </ul>
-                  </li>
-                </ul>
-    
-                <div class="footer">
-                    <p>
-                              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-                              </p>
-                </div>
-    
-              </div>
-            </nav>
-    
-           
-          <div id="content" class="p-4 p-md-5">
-    
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <div className="container-fluid">
-    
-                <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                  <i class="fa fa-bars"></i>
-                  <span class="sr-only">Toggle Menu</span>
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fa fa-bars"></i>
-                </button>
-    
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-    
-            <h2 class="mb-4">Sidebar #01</h2>
-            <p>Lorem ipsum dolor sit<i class="fas fa-coffee"></i> amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <div>
+            <div style={{ backgroundColor: 'black',color: 'red'}}>
+          <SideNav onSelect={(selected) => {
+           this.setState({content:selected})
+          } }>
+             
+          <SideNav.Toggle />
+          
+          <SideNav.Nav defaultSelected="home">
+          <h2 className="pt-5" style={{color:"white"}}>bar</h2>
+              <NavItem eventKey="home">
+                  <NavIcon>
+                      <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
+                  </NavIcon>
+                  <NavText>
+                      Tổng quan
+                  </NavText>
+              </NavItem>
+              <NavItem eventKey="cartiteam">
+                  <NavIcon>
+                      <i className="fa fa-shopping-cart" style={{ fontSize: '1.75em' }} />
+                  </NavIcon>
+                  <NavText>
+                      Đơn Hàng
+                  </NavText>
+                  <NavItem eventKey="cart">
+                      <NavText>
+                                  Danh sách đơn hàng
+                      </NavText>
+                  </NavItem>
+                  <NavItem eventKey="charts/barchart">
+                      <NavText>
+                                 Khách trả hàng
+                      </NavText>
+                  </NavItem>
+              </NavItem>
+              <NavItem eventKey="delivery">
+                  <NavIcon>
+                      <i className="fa fa-truck" style={{ fontSize: '1.75em' }} />
+                  </NavIcon>
+                  <NavText>
+                      Vận chuyển
+                  </NavText>
+                  <NavItem eventKey="products/1">
+                      <NavText>
+                          Tổng quan
+                      </NavText>
+                  </NavItem>
+                  <NavItem eventKey="products/2">
+                      <NavText>
+                         Quản lý giao hàng
+                      </NavText>
+                  </NavItem>
+              </NavItem>
+              <NavItem eventKey="user">
+                  <NavIcon>
+                      <i className="fa fa-user" style={{ fontSize: '1.75em' }} />
+                  </NavIcon>
+                  <NavText>
+                     Quản lý khách hàng
+                  </NavText>
+              </NavItem>
+              <NavItem eventKey="products">
+                  <NavIcon>
+                      <i className="fa fa-archive" style={{ fontSize: '1.75em' }} />
+                  </NavIcon>
+                  <NavText>
+                     Sản phẩm
+                  </NavText>
+                  <NavItem eventKey="productsList">
+                      <NavText>
+                          Danh sách sản phẩm
+                      </NavText>
+                  </NavItem>
+                  <NavItem eventKey="products/1">
+                      <NavText>
+                         Quản lý kho
+                      </NavText>
+                      
+                  </NavItem>
+                  
+              </NavItem>
+          </SideNav.Nav>
+          </SideNav>
           </div>
-            </div>
-      </body>
-      
+          <div>
+            <ProductAdmin />
+          </div>
+          </div>
         )
     }
 }

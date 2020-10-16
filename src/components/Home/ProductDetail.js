@@ -58,8 +58,8 @@ class ProductDetail extends Component {
 	});
 }
 addProductToCart = () => {
-	console.log("ahahah",localStorage.getItem(ACCESS_TOKEN_NAME)==="null")
-	if (localStorage.getItem(ACCESS_TOKEN_NAME)==="null") {
+	console.log("ahahah",localStorage.getItem(ACCESS_TOKEN_NAME))
+	if (localStorage.getItem(ACCESS_TOKEN_NAME)==="null" || localStorage.getItem(ACCESS_TOKEN_NAME)===null) {
 		alert("Bạn Phải Đăng Nhập")
 		this.props.history.push("/login")
 	}else{

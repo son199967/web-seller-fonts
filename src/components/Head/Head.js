@@ -14,13 +14,24 @@ class Head extends Component {
 
       }
       componentDidMount(){
-        console.log("dm")
           this.getCartDone()
       }
       handleCChange = (e,name) => {
         this.setState({
             [name]:e.target.value,
         });
+    }
+    checkLoginredicecrTocart=() => {
+        if(localStorage.getItem(ACCESS_TOKEN_NAME)==="null"|| localStorage.getItem(ACCESS_TOKEN_NAME)===null){
+           return;
+        }
+        return (<div>
+                            <a href="#" onClick={() =>this.redirectToCart()}>
+                                <i className="fa fa-shopping-cart"></i>
+                                <span>Giỏ Hàng</span>
+                             <div className="qty">{this.state.sizeF}</div>
+                            </a>
+                        </div>)
     }
 
     getCartDone = async () => {
@@ -64,16 +75,11 @@ class Head extends Component {
         this.props.history.push(`/product/${searchX}`);
     }
     redirectToCart = () => {
-        console.log("ahahah",localStorage.getItem(ACCESS_TOKEN_NAME)==="null")
-        if (localStorage.getItem(ACCESS_TOKEN_NAME)==="null") {
-            alert("Bạn Phải Đăng Nhập")
-            this.props.history.push("/login")
-        }else{
-        this.props.history.push("/cart")
-        }
+        this.props.history.push("/cart");
+    
     }
 render() {
-    console.log("logm",this.state.sizeF)
+    console.log("size",this.state.sizeF)
  return(
     <div id="header">
         <div className="container">
@@ -101,14 +107,8 @@ render() {
             
                 <div className="col-md-3 clearfix">
                     <div className="header-ctn">
-                    
-                        <div>
-                            <a href="#" onClick={() =>this.redirectToCart()}>
-                                <i className="fa fa-shopping-cart"></i>
-                                <span>Giỏ Hàng</span>
-                             <div className="qty">{this.state.sizeF}</div>
-                            </a>
-                        </div>
+                    {this.checkLoginredicecrTocart()}
+                        
                         {/* <div>
                             <a href="#">
                                 <i class="fa fa-heart-o"></i>

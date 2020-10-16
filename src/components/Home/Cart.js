@@ -26,6 +26,7 @@ import { withRouter } from "react-router-dom";
         };
       }
       componentWillMount(){
+        
           this.getCartDone()
       }
    
