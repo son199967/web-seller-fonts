@@ -101,11 +101,11 @@ import { withRouter } from "react-router-dom";
              </thead> 
              <tbody>
                  {cartProduct}
-  </tbody>
-  <tfoot> 
-   <tr class="visible-xs"> 
+            </tbody>
+           <tfoot> 
+           <tr class="visible-xs"> 
           <td class="text-center"><strong>Tổng {this.state.cart.totalPrice}đ</strong>
-    </td> 
+               </td> 
    </tr> 
    <tr> 
     <td><a href="http://hocwebgiare.com/" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>

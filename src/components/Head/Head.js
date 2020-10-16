@@ -13,8 +13,12 @@ class Head extends Component {
         }
 
       }
-      componentDidMount(){
-          this.getCartDone()
+      componentWillMount(){
+          console.log("previous",localStorage.getItem(ACCESS_TOKEN_NAME))
+          if(localStorage.getItem(ACCESS_TOKEN_NAME)!=="null"&& localStorage.getItem(ACCESS_TOKEN_NAME)!==null){
+            this.getCartDone()
+          }
+         
       }
       handleCChange = (e,name) => {
         this.setState({

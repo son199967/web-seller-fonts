@@ -11,10 +11,6 @@ import CateDete from '../../components/Home/CateDete';
 import Cart from '../../components/Home/Cart';
 import ProductDetail from './ProductDetail';
 import Footer from '../../components/Home/Footer'
-
-
-
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -53,8 +49,6 @@ class Home extends Component {
 
 
   getAllProduction = async() => {
-
-  
      const newProduct = await  axios.get(API_BASE_URL + '/product/getAllProduct')
       .then(function (response) {
         console.log("response:" , response.data);

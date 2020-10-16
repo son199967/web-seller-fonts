@@ -26,6 +26,7 @@ import { withRouter } from "react-router-dom";
         this.props.history.push('/home');
     }
     handleSubmitClick = (e) => {
+       e.preventDefault()
         console.log("aaa"+this.state.email+"bbb"+this.state.password);
         const payload={
             "email":this.state.email,

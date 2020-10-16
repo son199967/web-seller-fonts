@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import Head from './components/Head/Head';
-
 import Login from './components/LoginForm/Login';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
