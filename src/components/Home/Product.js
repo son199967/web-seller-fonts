@@ -56,7 +56,7 @@ class Product extends Component {
             <i className="fa fa-star"></i>
           </div>
           <h3 className="product-name"><a href="#">{a.productName}</a></h3>
-          <h4 className="product-price">{a.prices[0].unitPrice}đ <del class="product-old-price">{a.prices[0].unitPrice}đ</del></h4>
+          <h4 className="product-price">{a.prices.unitPrice}đ <del class="product-old-price">{a.prices.unitPrice}đ</del></h4>
         </div>
       </div>
     );

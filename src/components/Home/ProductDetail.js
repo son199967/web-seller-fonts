@@ -12,13 +12,16 @@ class ProductDetail extends Component {
 		 productName:"",
 		 productInfo:"", 
 		 productType:"", 
+		 code:"",
 		 imageProduct:"",
 		  providerName:"", 
-		 prices:[
+		 prices:
 			{
-				unitPrice:null
+				unitPrice:null,
+				wholePrice:null,
+				importPrice:null
 			}
-		 ], 
+		 , 
 		 promotions:[
 			 {amount:null}
 		 ], 
@@ -150,7 +153,7 @@ getProductById = async() => {
 								<a  href="#" className="review-link">10 Review(s) | Add your review</a>
 							</div>
 							<div>
-								<h3 className="product-price">{this.state.product.prices[0].unitPrice} VND <del className="product-old-price">{this.state.product.prices[0].unitPrice} VND</del></h3>
+								<h3 className="product-price">{this.state.product.prices.unitPrice} VND <del className="product-old-price">{this.state.product.prices.unitPrice} VND</del></h3>
 								<span className="product-available">In Stock</span>
 							</div>
                          	<p>{this.state.product.productDetail.content}</p>

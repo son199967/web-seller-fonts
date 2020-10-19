@@ -9,7 +9,7 @@ class ProductCategory extends Component {
             newProduct: [
                 {
                     id: null, productName: "", productInfo: "", productType: "", imageProduct: "", providerName: "",
-                    prices: [{ unitPrice: null }],
+                    prices: { unitPrice: null },
                     promotions: [{ amount: null }],
                     productDetail: null
                 }
@@ -73,7 +73,7 @@ class ProductCategory extends Component {
                             <i class="fa fa-star"></i>
                         </div>
                         <h3 class="product-name"><a href="#">{a.productName}</a></h3>
-                        <h4 class="product-price">{a.prices[0].unitPrice} đ<del class="product-old-price">{a.prices[0].unitPrice}đ</del></h4>
+                        <h4 class="product-price">{a.prices.unitPrice} đ<del class="product-old-price">{a.prices.unitPrice}đ</del></h4>
                         
                         {/* <div class="product-btns">
                             <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
@@ -95,7 +95,7 @@ class ProductCategory extends Component {
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">{a.productName}</a></h3>
-                                            <h4 class="product-price">{a.prices[0].unitPrice} đ <del class="product-old-price">{a.prices[0].unitPrice} đ</del></h4>
+                                            <h4 class="product-price">{a.prices.unitPrice} đ <del class="product-old-price">{a.prices.unitPrice} đ</del></h4>
                                         </div>
                                     </div>
 
