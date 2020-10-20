@@ -189,6 +189,9 @@ class Admin extends Component {
                         <Route path="/admin/addProduct" component={ProductAdmin}>
                             <ProductDetailAdmin />
                         </Route>
+                        <Route path="/admin/updateProduct/:id" component={ProductAdmin}>
+                            <ProductDetailAdmin />
+                        </Route>
 
                     </Switch>
 

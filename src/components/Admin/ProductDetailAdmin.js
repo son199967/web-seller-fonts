@@ -33,14 +33,36 @@ class ProductDetailAdmin extends Component {
                     discription: "",
                     color: [],
                     size: [],
+                    donvi:"",
                     images: []
                 }
             },
             type: [],
-            imgXX: ""
+            imgXX: "",
+            sizeP:null,
+            donviM:""
         }
         
     }
+    
+    getProductById = async () => {
+        const id = this.props.match.params.id;
+       if (id===undefined) return;
+        const product = await axios.get(API_BASE_URL+'/product/getProductById/'+id)
+          .then( function(response) {
+              if(response.status === 200){
+               return response.data;
+              }
+              else {
+                  alert("Có lỗi xảy ra")
+              }
+          })
+          .catch(function (error) {
+              console.log(error);
+          });
+          console.log("product",product)
+          this.setState({product})
+      }
     handleChangeObj = (e, name) => {
       console.log("xxm",e.target.value);
         const { product } = this.state
@@ -51,11 +73,19 @@ class ProductDetailAdmin extends Component {
             }
         });
     }
+    handleChange = (e,name) => {
+        this.setState({
+            [name]:e.target.value,
+        });
+    }
     handleChangeObjObj = (e, name) => {
         let a=null;
         if(name==="discription"){
             a=this.state.product.productDetail
             a.discription=e.target.value
+        }else if(name==="donvi"){
+            a=this.state.product.productDetail
+            a.donvi=e.target.value
         }
           const { product } = this.state
           this.setState({
@@ -88,12 +118,31 @@ class ProductDetailAdmin extends Component {
         this.setState({imgXX:e.target.value});
     }
     createNewProduct = () =>{
+       
         axios.post(API_BASE_URL+'/product/createProduct/',this.state.product,{ headers: {
             Authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
            }})
           .then( function(response) {
+              console.log("répo",response)
               if(response.status === 200){
-               alert("Thêm Thành công sản phẩm giỏ hàng")
+               alert("Thêm thành công sản phẩm")
+              }else {
+                  alert("Có lỗi xảy ra")
+              }
+          })
+          .catch(function (error) {
+              console.log(error);
+          });
+    }
+    updateProductss = () =>{
+        console.log("console.log",this.state.product)
+        axios.put(API_BASE_URL+'/product/updateProduct/',this.state.product,{ headers: {
+            Authorization: localStorage.getItem(ACCESS_TOKEN_NAME)
+           }})
+          .then( function(response) {
+              console.log("répo",response)
+              if(response.status === 200){
+               alert("Thêm thành công sản phẩm")
               }else {
                   alert("Có lỗi xảy ra")
               }
@@ -114,18 +163,20 @@ class ProductDetailAdmin extends Component {
             })
         }  
          
-            let a =this.state.product.productDetail;
-            a.images.push(this.state.imgXX)
-            this.setState({
-                product: {
-                    ...product,
-                    productDetail:a
-                }
-            })
+            // let a =this.state.product.productDetail;
+            // a.images.push(this.state.imgXX)
+            // this.setState({
+            //     product: {
+            //         ...product,
+            //         productDetail:a
+            //     }
+            // })
             this.setState({imgXX:""});
     }
     componentDidMount() {
+       
         this.getAllTypeProduct()
+        this.getProductById();
     }
     getAllTypeProduct = async () => {
         const type = await axios.get(API_BASE_URL + '/product/getAllTypeProduct')
@@ -144,6 +195,49 @@ class ProductDetailAdmin extends Component {
         console.log("product", type)
         this.setState({ type })
     }
+    updateSize = () => {
+        
+        let b= this.state.product.productDetail;
+        if(this.state.sizeP===null) return;
+        b.size.push(this.state.sizeP)
+        const { product } = this.state
+          this.setState({
+              product: {
+                  ...product,
+                  productDetail:b 
+              }
+          });
+          console.log("NN",this.state.product.productDetail)
+
+    }
+    resetSize =()=>{
+       
+        let b= this.state.product.productDetail;
+        if(b.size.length===0) return;
+        b.size.splice(b.size.length-1);
+        const { product } = this.state
+          this.setState({
+              product: {
+                  ...product,
+                  productDetail:b 
+              }
+          });
+          
+    }
+    checkTitle=()=>{
+        const id = this.props.match.params.id;
+        if (id===undefined) {
+            return  <h3 className="row mt-lg-5 pt-3 pl-3">Thêm mới sản phẩm</h3>
+        }
+        return  <h3 className="row mt-lg-5 pt-3 pl-3">Cập nhập sản phẩm</h3>
+    }
+    checkButtom =() =>{
+        const id = this.props.match.params.id;
+        if (id===undefined) {
+            return  <button className="btn btn-success text-center" type="submit" onClick={() => this.createNewProduct()} >Thêm sản phẩm</button>
+        }
+        return  <button className="btn btn-success text-center" type="submit" onClick={() => this.updateProductss()} >Update Product</button>
+    }
 
     render() {
         console.log("aaaa",this.state.product)
@@ -153,9 +247,13 @@ class ProductDetailAdmin extends Component {
         const imeges =this.state.product.productDetail.images.map((s) => 
             <img src={s} style={{width:"200px" ,background:"center"}}  class="img-thumbnail"/>
         )
+        const dataCC=this.state.product.productDetail.size.map((s) =>
+    <span>{s} {this.state.product.productDetail.donvi};</span>
+        )
+        
         return (
             <div className="container mt-lg-5" style={{ backgroundColor: "#EFFBFB" }}>
-                <h3 className="row mt-lg-5 pt-3 pl-3">Thêm mới sản phẩm</h3>
+               {this.checkTitle()}
                 <div className="row mt-lg-5">
                     <div className="col-8">
                         <div>
@@ -245,15 +343,23 @@ class ProductDetailAdmin extends Component {
                                     </div>
                                     <hr></hr>
                                     <div class="col-md-12 mb-3">
-                                        <label for="validationCustom02" className="float-left">Tags</label>
-                                        <div class="dropdown">
-                                            <input type="text" class="form-control dropdown-toggle" id="validationCustom02" placeholder="Loại sản phẩm" value="" required />
+                                        <div className="row pl-3">
+        <label for="validationCustom02" className="float-left">Loại:{dataCC}</label>
+                                        </div>
+                                        <div className="row">
+                                        <div class=" col-7">
+                                            <input type="text" class="form-control "  placeholder="Kích Thước" value={this.state.sizeP} onChange={(e) =>this.handleChange(e,"sizeP")} required />
+                                        </div>
+                                        <div class=" col-5">
+                                            <input type="text" class="form-control " placeholder="Đơn vị" value={this.state.donvi} onChange={(e) => this.handleChangeObjObj(e,"donvi")} required />
+                                        </div>
+                                        <div className=" col-2 mt-2">
+                                            <button type="submit" className ="btn btn-danger" onClick={() =>this.updateSize()}>update</button>
+                                        </div>
+                                        <div className=" col-2 ml-5 mt-2">
+                                            <button type="submit" className ="btn btn-danger" onClick={()=> this.resetSize()}>Reset</button>
+                                        </div>
 
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
                                         </div>
                                     </div>
 
@@ -303,7 +409,7 @@ class ProductDetailAdmin extends Component {
                 <div className="mt-5 col-12">
                     <form class="needs-validation" >
                         <div class="form-row rounded border-2 p-5" style={{ backgroundColor: "#FFFFFF" }} >
-                        <button className="btn btn-success text-center" type="submit" onClick={() => this.createNewProduct()} >Thêm sản phẩm</button>
+                        {this.checkButtom()}
                         </div>
                     </form>
                 </div>

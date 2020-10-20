@@ -38,6 +38,22 @@ class ProductAdmin extends Component {
             })
         this.setState({ newProduct })
     }
+    deleteProduct= async (id) =>{
+     const status = await axios.delete(API_BASE_URL + '/product/deleteProduct?id='+id)
+        .then(function (response) {
+                return response.status;
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        console.log("status",status)
+        if(status==200){
+            this.getAllProduction();
+        }
+    }
+    updateProduct = (id) =>{
+        this.props.history.push("/admin/updateProduct/"+id)
+    }
     render() {
 
         const cartProduct = this.state.newProduct.map((c, index) =>
@@ -58,9 +74,9 @@ class ProductAdmin extends Component {
                 <td data-th="Price">{c.providerName} </td>
                 <td data-th="Subtotal" class="text-center">Het hang </td>
                 <td class="actions" data-th="">
-                    <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
+                    <button class="btn btn-info btn-sm" onClick={() => this.updateProduct(c.id)}><i class="fa fa-edit"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>
+                    <button class="btn btn-danger btn-sm" onClick={() =>this.deleteProduct(c.id)} ><i class="fa fa-trash-o"></i>
                     </button>
                 </td>
             </tr>

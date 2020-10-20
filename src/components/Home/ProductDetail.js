@@ -89,8 +89,7 @@ getProductById = async() => {
 		if(response.status === 200){
 		console.log("ashajs",response.data)
          return response.data;
-		}
-		else {
+		}else {
 			alert("Có lỗi xảy ra")
 		}
 	})
@@ -156,7 +155,7 @@ getProductById = async() => {
 								<h3 className="product-price">{this.state.product.prices.unitPrice} VND <del className="product-old-price">{this.state.product.prices.unitPrice} VND</del></h3>
 								<span className="product-available">In Stock</span>
 							</div>
-                         	<p>{this.state.product.productDetail.content}</p>
+                         	<p>{this.state.product.productInfo}</p>
 
 							<div className="product-options">
 								<label>
@@ -218,7 +217,7 @@ getProductById = async() => {
 								<div id="tab1" className="tab-pane fade in active">
 									<div className="row">
 										<div className="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        	<p>{this.state.product.productDetail.discription}</p>
 										</div>
 									</div>
 								</div>
