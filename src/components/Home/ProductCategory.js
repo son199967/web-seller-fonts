@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
+import Pagination from "react-js-pagination";
 class ProductCategory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newProduct: [
+            cate:this.props.match.params.category,
+            branch:[],
+            provider:"",
+            activePage: 0,
+            itemsCountPerPage: 12,
+            totalItemsCount: 0,
+            pageRangeDisplayed: 5,
+            product: [
                 {
-                    id: null, productName: "", productInfo: "", productType: "", imageProduct: "", providerName: "",
+                    id: null, productName: "", productInfo: [], productType: "", imageProduct: "", providerName: "",
                     prices: { unitPrice: null },
                     promotions: [{ amount: null }],
                     productDetail: null
@@ -16,20 +24,26 @@ class ProductCategory extends Component {
             ],
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         this.getAllProduction();
+        this.getAllBranch();
         console.log("da1")
     }
-    sendData (a) {
-        console.log("aa"+a);
+    sendData(a) {
+        console.log("aa" + a);
         this.props.history.push(`/detail/${a}`);
-        }
+    }
+    clickButomhh=(s)=>{
+        this.setState({
+            provider:s,
+        })
+        this.getAllProduction();
+    }
 
 
     getAllProduction = async () => {
-
-
-        const newProduct = await axios.get(API_BASE_URL + '/product/getAllProduct')
+       
+        const product = await axios.get(API_BASE_URL + `/product/getProductCate?cate=${this.state.cate}&&page=0&size=${this.state.itemsCountPerPage}&&provider=${this.state.provider}`)
             .then(function (response) {
                 console.log("response:", response.data);
                 if (response.status === 200) {
@@ -39,32 +53,59 @@ class ProductCategory extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-        const topProduct = await axios.get(API_BASE_URL + '/product/getAllProduct')
-            .then(function (response) {
-                console.log("response:", response.data);
-                if (response.status === 200) {
-                    return response.data
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        this.setState({ newProduct })
+        this.setState({ 
+            product: product.content,
+            totalItemsCount:product.totalElements
+         })
     }
+    getAllBranch= async() =>{
+        const branch = await axios.get(API_BASE_URL + `/product/getAllBranch?cate=${this.state.cate}`)
+        .then(function (response) {
+           
+            if (response.status === 200) {
+                return response.data
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+     
+    this.setState({branch})
+    }
+    
+    handlePageChange = async(pageNumber)=> {
+        const cate = this.props.match.params.category
+        const product = await axios.get(API_BASE_URL + `/product/getProductCate?cate=${cate}&&page=${pageNumber}&size=${this.state.itemsCountPerPage}&provider=${this.state.provider}`)
+            .then(function (response) {
+                console.log("response:", response.data);
+                if (response.status === 200) {
+                    return response.data
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        this.setState({ 
+            product: product.content,
+            totalItemsCount:product.totalElements
+         })
+         
+      }
     render() {
+        console.log("KKK",this.state.provider)
         const category = this.props.match.params.category
-        const listProduct = this.state.newProduct.map((a) =>
+        const listProduct = this.state.product.map((a) =>
             <div class="col-md-4 col-xs-6">
                 <div class="product">
                     <div class="product-img">
-                        <img src={a.imageProduct} alt="" onClick={() =>this.sendData(a.id)}/>
+                        <img src={a.imageProduct} alt="" onClick={() => this.sendData(a.id)} />
                         <div class="product-label">
                             <span class="sale">-30%</span>
                             <span class="new">NEW</span>
                         </div>
                     </div>
                     <div class="product-body">
-                        <p class="product-category">Category</p>
                         <div class="product-rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -74,32 +115,35 @@ class ProductCategory extends Component {
                         </div>
                         <h3 class="product-name"><a href="#">{a.productName}</a></h3>
                         <h4 class="product-price">{a.prices.unitPrice} đ<del class="product-old-price">{a.prices.unitPrice}đ</del></h4>
-                        
-                        {/* <div class="product-btns">
-                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                        </div> */}
                     </div>
-                    {/* <div class="add-to-cart">
-                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                    </div> */}
+                    
                 </div>
             </div>
-           )
-        const advantis=this.state.newProduct.map((a) =>
-                                <div class="product-widget">
-                                        <div class="product-img" onClick={() =>this.sendData(a.id)}>
-                                            <img src={a.imageProduct} alt="" />
-                                        </div>
-                                        <div class="product-body">
-                                            <p class="product-category">Category</p>
-                                            <h3 class="product-name"><a href="#">{a.productName}</a></h3>
-                                            <h4 class="product-price">{a.prices.unitPrice} đ <del class="product-old-price">{a.prices.unitPrice} đ</del></h4>
-                                        </div>
-                                    </div>
-
+        )
         
+        const branchList=this.state.branch.map((s) =>
+        <div class="input-checkbox">
+        <input type="button" onClick={() => this.clickButomhh(s)}/>
+        <label for="brand-1">
+            <span></span>
+   {s}
+    <small>(578)</small>
+        </label>
+    </div>
+        )
+        const advantis = this.state.product.map((a) =>
+            <div class="product-widget">
+                <div class="product-img" onClick={() => this.sendData(a.id)}>
+                    <img src={a.imageProduct} alt="" />
+                </div>
+                <div class="product-body">
+                    <p class="product-category">Category</p>
+                    <h3 class="product-name"><a href="#">{a.productName}</a></h3>
+                    <h4 class="product-price">{a.prices.unitPrice} đ <del class="product-old-price">{a.prices.unitPrice} đ</del></h4>
+                </div>
+            </div>
+
+
         )
         return (
             <div class="container">
@@ -119,7 +163,7 @@ class ProductCategory extends Component {
                                             <input type="checkbox" id="category-1" />
                                             <label for="category-1">
                                                 <span></span>
-										Laptops
+									   	Laptops
 										<small>(120)</small>
                                             </label>
                                         </div>
@@ -192,61 +236,15 @@ class ProductCategory extends Component {
                                 <div class="aside">
                                     <h3 class="aside-title">Brand</h3>
                                     <div class="checkbox-filter">
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-1" />
-                                            <label for="brand-1">
-                                                <span></span>
-										SAMSUNG
-										<small>(578)</small>
-                                            </label>
-                                        </div>
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-2" />
-                                            <label for="brand-2">
-                                                <span></span>
-										LG
-										<small>(125)</small>
-                                            </label>
-                                        </div>
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-3" />
-                                            <label for="brand-3">
-                                                <span></span>
-										SONY
-										<small>(755)</small>
-                                            </label>
-                                        </div>
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-4" />
-                                            <label for="brand-4">
-                                                <span></span>
-										SAMSUNG
-										<small>(578)</small>
-                                            </label>
-                                        </div>
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-5" />
-                                            <label for="brand-5">
-                                                <span></span>
-										LG
-										<small>(125)</small>
-                                            </label>
-                                        </div>
-                                        <div class="input-checkbox">
-                                            <input type="checkbox" id="brand-6" />
-                                            <label for="brand-6">
-                                                <span></span>
-										SONY
-										<small>(755)</small>
-                                            </label>
-                                        </div>
+                                       
+                                       {branchList}
                                     </div>
                                 </div>
 
 
                                 <div class="aside">
-                                    <h3 class="aside-title">Top selling</h3>     
-                                   {advantis}
+                                    <h3 class="aside-title">Top selling</h3>
+                                    {advantis}
                                 </div>
 
                             </div>
@@ -279,16 +277,18 @@ class ProductCategory extends Component {
                                 <div class="row">
                                     {listProduct}
                                 </div>
-                                <div class="store-filter clearfix">
-                                    <span class="store-qty">Showing 20-100 products</span>
-                                    <ul class="store-pagination">
-                                        <li class="active">1</li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                    </ul>
+                                <div className="col-12">
+                                    <Pagination style={{ float: "right" }}
+                                        activePage={this.state.activePage}
+                                        itemsCountPerPage={this.state.itemsCountPerPage}
+                                        totalItemsCount={this.state.totalItemsCount}
+                                        pageRangeDisplayed={5}
+                                        onChange={this.handlePageChange}
+                                        itemClass="page-item"
+                                        linkClass="page-link"
+                                    />
                                 </div>
+
 
                             </div>
 

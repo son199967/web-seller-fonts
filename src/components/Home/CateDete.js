@@ -2,50 +2,29 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 class CateDete extends Component {
-  constructor(props) {
-    super(props);
-  }
+	constructor(props) {
+		super(props);
+	}
 
-  render() {
-    return (
-      <div class="row p-12 ml-5">
-        <div class="col-md-4 col-xs-6">
-						<div class="shop">
-							<div class="shop-img">
-								<img src="./img/shop03.png" alt=""></img>
-							</div>
-							<div class="shop-body">
-								<h3>Accessories Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-							</div>
-						</div>
-				</div>
-        <div class="col-md-4 col-xs-6">
-						<div class="shop">
-							<div class="shop-img">
-								<img src="./img/shop03.png" alt=""></img>
-							</div>
-							<div class="shop-body">
-								<h3>Accessories Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-							</div>
-						</div>
-					</div>
-          <div class="col-md-4 col-xs-6">
-						<div class="shop">
-							<div class="shop-img">
-								<img src="../public/img/shop03.png" alt=""></img>
-							</div>
-							<div class="shop-body">
-								<h3>Cameras Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-							</div>
-						</div>
-					</div>
-      </div>
-    )
-  }
+	render() {
+		return (
+			<div class="row">
+				<Carousel>
+                <div>
+                    <img src="https://anphat.com.vn/media/banner/09_Octc79319087b28ebd05dc37b122e3036a3.jpg" />
+                    <p className="legend">Legend 1</p>
+                </div>
+                <div>
+                    <img src="https://anphat.com.vn/media/banner/17_Augd9c80757d5585d6868c00eae4f6f3604.jpg" />
+                    <p className="legend">Legend 2</p>
+                </div>
+            </Carousel>
+			</div>
+		)
+	}
 }
 
 export default withRouter(CateDete);

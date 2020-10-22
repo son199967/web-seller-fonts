@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
 import ReactImageMagnify from 'react-image-magnify';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 class ProductDetail extends Component {
   constructor(props) {
 	super(props);
@@ -10,7 +12,7 @@ class ProductDetail extends Component {
 		product :{
 		 id:null, 
 		 productName:"",
-		 productInfo:"", 
+		 productInfo:[], 
 		 productType:"", 
 		 code:"",
 		 imageProduct:"",
@@ -110,11 +112,15 @@ getProductById = async() => {
 	  ) 
 	  const color = this.state.product.productDetail.color.map((s) =>
 	  <option value={s}>{s}</option>
-	  ) 
+	  )
+	  const pi = this.state.product.productInfo.map((s) =>
+  <p><i class="fa fa-star" aria-hidden="true" style={{color:"red"}}></i>  {s}</p>
+	  )  
 	  const images = this.state.product.productDetail.images.map((s) =>
-	  <div className="product-preview">
-	  <img src={s} alt="" />
-         </div>
+	  <div>
+                    <img src={s} />
+                    
+                </div>
 	  )
 	  console.log("cartItem",this.state.cartIteam)
     return (
@@ -122,20 +128,11 @@ getProductById = async() => {
 			<div className="container">
 					<div className="row">
 
-					<div className="col-md-5 col-md-push-2">
+					<div className="col-md-7 col-md-push-2">
 						<div id="product-main-img">
-							<div className="product-preview">
-								<img src={this.state.product.imageProduct} alt="" />
-							</div>
-							{images}
-						</div>
-					</div>
-					<div className="col-md-2  col-md-pull-5">
-						<div id="product-imgs">
-						    <div className="product-preview">
-								<img src={this.state.product.imageProduct} alt="" />
-							</div>
-							{images}
+						<Carousel>
+                        {images}
+                     </Carousel>
 						</div>
 					</div>
 					<div className="col-md-5">
@@ -155,7 +152,7 @@ getProductById = async() => {
 								<h3 className="product-price">{this.state.product.prices.unitPrice} VND <del className="product-old-price">{this.state.product.prices.unitPrice} VND</del></h3>
 								<span className="product-available">In Stock</span>
 							</div>
-                         	<p>{this.state.product.productInfo}</p>
+                         	<p>{pi}</p>
 
 							<div className="product-options">
 								<label>

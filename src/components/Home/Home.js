@@ -20,60 +20,11 @@ import ProductCategory from './ProductCategory';
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      newProduct: [
-        {
-          id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
-         prices:[  	{unitPrice:null}], 
-         promotions:[{ amount:null} ], 
-		 productDetail:null
-        }
-      ],
-      topProduct: [
-        {
-          id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
-         prices:[  	{unitPrice:0}], 
-         promotions:[{ amount:0} ], 
-		 productDetail:null
-        }
-      ],
-      adsProduct: [],
-      productDetailCheck: false,
-      productDetail: [],
-    };
-  }
-  componentWillMount() {
-    this.getAllProduction();
-    console.log("da1")
+    
   }
 
 
-  getAllProduction = async() => {
-     const newProduct = await  axios.get(API_BASE_URL + '/product/getAllProduct')
-      .then(function (response) {
-        console.log("response:" , response.data);
-        if (response.status === 200) {
-          return response.data
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      const topProduct = await  axios.get(API_BASE_URL + '/product/getAllProduct')
-      .then(function (response) {
-        console.log("response:" , response.data);
-        if (response.status === 200) {
-          return response.data
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      this.setState({
-        newProduct:newProduct,
-        topProduct:topProduct
-      })
-  }
+ 
   callbackFunction = (childData) => {
     this.setState({
       productDetail: childData,
@@ -83,7 +34,6 @@ class Home extends Component {
    }
     
   render() {
-    console.log("newProduct",this.state.newProduct)
     return(
       <Router>
         <body>
@@ -91,7 +41,6 @@ class Home extends Component {
          <Category  class="row" />
           <div class="container">
          <Switch>
-  
            <Route path="/detail/:id" component={ProductDetail} >
              <ProductDetail />
           </Route>   
@@ -101,10 +50,10 @@ class Home extends Component {
           <Route path="/" >
           <CateDete />
           <CategoryDetail title={"New Product"} />
-          <Product newProduct={this.state.newProduct}  class="row"/>      
+          <Product   class="row"/>      
           <HotDeal class ="row" />
-          <CategoryDetail title={"TOP SELLING"} />
-          <Product newProduct={this.state.topProduct}  class="row"/>  
+          {/* <CategoryDetail title={"TOP SELLING"} />
+          <Product newProduct={this.state.topProduct}  class="row"/>   */}
           </Route>   
          </Switch>
          </div>

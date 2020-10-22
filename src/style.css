@@ -797,9 +797,12 @@ textarea.input {
 }
 .nav-item a{
   color: white !important;
-  font-size: 1em !important;
-  padding-left: 40px;
+  font-size:  0.9em!important;
+  padding-left: 10px;
   }
+.nav-item :hover{
+    background-color: black;
+}
 
 .hot-deal .hot-deal-countdown {
   margin-bottom: 30px;
@@ -873,7 +876,14 @@ textarea.input {
 
 .product .product-img {
   position: relative;
-  height: 300px;
+  height: 250px;
+}
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  border-radius: 0.25rem;
+  float: right;
 }
 
 .product .product-img>img {
@@ -2200,4 +2210,12 @@ textarea.input {
     float: none;
     margin-top: 10px;
   }
+}
+
+#tannhiet{
+  display: none;
+}
+
+#block-tannhiet:hover{
+  display: block;
 }

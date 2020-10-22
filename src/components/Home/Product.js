@@ -3,10 +3,62 @@ import { withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import Pagination from "react-js-pagination";
 class Product extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      activePage: 0,
+        itemsCountPerPage: 12,
+        totalItemsCount: 0,
+        pageRangeDisplayed: 5,
+      newProduct: [
+        {
+          id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
+         prices:[  	{unitPrice:null}], 
+         promotions:[{ amount:null} ], 
+		 productDetail:null
+        }
+      ],
+      
   }
+}
+componentDidMount(){
+  this.getAllProduction();
+}
+handlePageChange = async(pageNumber)=> {
+  const newProduct = await axios.get(API_BASE_URL + '/product/getAllProduct'+"?size="+this.state.itemsCountPerPage+"&page="+pageNumber)
+  .then(function (response) {
+    if (response.status === 200) {
+      return response.data
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  this.setState({
+    newProduct:newProduct.content,
+    totalItemsCount:newProduct.totalElements,
+  })
+}
+  getAllProduction = async() => {
+   
+    const newProduct =  await axios.get(API_BASE_URL + '/product/getAllProduct'+"?size="+this.state.itemsCountPerPage+"&page=0")
+    .then(function (response) {
+     
+      if (response.status === 200) {
+        return response.data
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    console.log("responseMM:" , newProduct);
+    this.setState({
+      newProduct:newProduct.content,
+      totalItemsCount:newProduct.totalElements,
+    })
+ }
   sendData (a) {
     console.log("aa"+a);
     this.props.history.push(`/detail/${a}`);
@@ -36,9 +88,8 @@ class Product extends Component {
   
 
   render() {
-    console.log("dataxx:" , this.props.newProduct);
-    const listItems = this.props.newProduct.map((a) =>
-       
+    console.log("dataxx:" , this.state.newProduct);
+    const listItems = this.state.newProduct.map((a) =>
       <div className="product col-3" >
         <div className="product-img" onClick={() =>this.sendData(a.id)} >
           <img src={a.imageProduct} alt=""></img>
@@ -70,6 +121,20 @@ class Product extends Component {
                 <div id="slick-nav-1" className="products-slick-nav"></div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="row">
+
+        <div className="col-12">
+          <Pagination style ={{float: "right"}}
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsCountPerPage}
+                totalItemsCount={this.state.totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                itemClass="page-item"
+                linkClass="page-link"
+            />
           </div>
         </div>
       </div>
