@@ -44,7 +44,10 @@ class Home extends Component {
            <Route path="/detail/:id" component={ProductDetail} >
              <ProductDetail />
           </Route>   
-          <Route path="/product/:category" component={ProductCategory} >
+          <Route path="/product/:provideType/:provider" component={ProductCategory} >
+             <ProductCategory />
+          </Route>  
+          <Route path="/product/:search" component={ProductCategory} >
              <ProductCategory />
           </Route>      
           <Route path="/" >

@@ -4,12 +4,16 @@ import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiContants';
 import axios from 'axios';
 import Product from '../Home/Product';
 import { Button } from 'bootstrap';
-
+import Pagination from "react-js-pagination";
 class ProductAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newProduct: [
+            activePage: 0,
+            itemsCountPerPage: 8,
+            totalItemsCount: 0,
+            pageRangeDisplayed: 5,
+            product: [
                 {
                     id: null, productName: "", productInfo: "", productType: "", imageProduct: "", providerName: "",
                     prices: [{ unitPrice: null }],
@@ -23,21 +27,39 @@ class ProductAdmin extends Component {
         this.getAllProduction();
         console.log("da1")
     }
+    handlePageChange = async(pageNumber)=> {
+        const newProduct = await axios.get(API_BASE_URL + '/product/getProductStatus'+"?size="+this.state.itemsCountPerPage+"&page="+pageNumber)
+        .then(function (response) {
+          if (response.status === 200) {
+            return response.data
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        this.setState({
+          product:newProduct.content,
+          totalItemsCount:newProduct.totalElements,
+        })
+      }
 
-
-    getAllProduction = async () => {
-        const newProduct = await axios.get(API_BASE_URL + '/product/getAllProduct')
-            .then(function (response) {
-                console.log("response:", response.data);
-                if (response.status === 200) {
-                    return response.data
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        this.setState({ newProduct })
-    }
+    getAllProduction = async() => {
+   
+        const newProduct =  await axios.get(API_BASE_URL + '/product/getProductStatus'+"?size="+this.state.itemsCountPerPage+"&page=0")
+        .then(function (response) {
+          if (response.status === 200) {
+            return response.data
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        console.log("responseMM:" , newProduct.content);
+        this.setState({
+          product:newProduct.content,
+          totalItemsCount:newProduct.totalElements,
+        })
+     }
     deleteProduct= async (id) =>{
      const status = await axios.delete(API_BASE_URL + '/product/deleteProduct?id='+id)
         .then(function (response) {
@@ -51,12 +73,41 @@ class ProductAdmin extends Component {
             this.getAllProduction();
         }
     }
+    setTop= async (id) =>{
+        const status = await axios.put(API_BASE_URL + '/product/updateStatusProduct?id='+id+'&status=2')
+           .then(function (response) {
+                   return response.status;
+           })
+           .catch(function (error) {
+               console.log(error);
+           })
+           console.log("status",status)
+           if(status==200){
+            alert("Sản phẩm đã là Top")
+
+               this.getAllProduction();
+           }
+       }
+    setNew= async (id) =>{
+        const status = await axios.put(API_BASE_URL + '/product/updateStatusProduct?id='+id+'&status=1')
+           .then(function (response) {
+                   return response.status;
+           })
+           .catch(function (error) {
+               console.log(error);
+           })
+           console.log("status",status)
+           if(status==200){
+               alert("Sản phẩm đã là New")
+               this.getAllProduction();
+           }
+       }
     updateProduct = (id) =>{
         this.props.history.push("/admin/updateProduct/"+id)
     }
     render() {
-
-        const cartProduct = this.state.newProduct.map((c, index) =>
+        
+        const cartProduct = this.state.product.map((c, index) =>
             <tr>
                 <td>
                     <p>#{index}</p>
@@ -74,10 +125,18 @@ class ProductAdmin extends Component {
                 <td data-th="Price">{c.providerName} </td>
                 <td data-th="Subtotal" class="text-center">Het hang </td>
                 <td class="actions" data-th="">
+                    <div className="row">
                     <button class="btn btn-info btn-sm" onClick={() => this.updateProduct(c.id)}><i class="fa fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" onClick={() =>this.deleteProduct(c.id)} ><i class="fa fa-trash-o"></i>
                     </button>
+                    </div>
+                    <div className="row">
+                    <button class="btn btn-info btn-sm" onClick={() => this.setTop(c.id)}><i class="fa fa-hand-pointer-o"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onClick={() =>this.setNew(c.id)} ><i class="fa fa-line-chart"></i>
+                    </button>
+                    </div>
                 </td>
             </tr>
         )
@@ -117,6 +176,17 @@ class ProductAdmin extends Component {
                         </tbody>
                     </table>
                 </div>
+                <div className="col-12">
+          <Pagination style ={{float: "right"}}
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsCountPerPage}
+                totalItemsCount={this.state.totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                itemClass="page-item"
+                linkClass="page-link"
+            />
+          </div>
             </div>
 
 

@@ -797,13 +797,9 @@ textarea.input {
 }
 .nav-item a{
   color: white !important;
-  font-size:  0.9em!important;
+  font-size: 0.9em!important;
   padding-left: 10px;
   }
-.nav-item :hover{
-    background-color: black;
-}
-
 .hot-deal .hot-deal-countdown {
   margin-bottom: 30px;
 }
@@ -1007,6 +1003,48 @@ textarea.input {
   color: #D10024;
   border-radius: 50%;
 }
+.dropbtn {
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black !important;
+  padding: 3px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.9em !important;
+  
+}
+.XX{
+   padding-left: 10px;
+   padding-right: 10px;
+  float: left;
+  width: max-content ;
+}
+
+.dropdown-content a:hover {color:red !important}
+
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: white;
+color: black !important;
+}
+
 
 .product .product-body .product-btns>button .tooltipp {
   position: absolute;

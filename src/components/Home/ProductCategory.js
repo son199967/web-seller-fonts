@@ -7,14 +7,24 @@ class ProductCategory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cate:this.props.match.params.category,
+            provider:this.props.match.params.provider,
+            provideType:this.props.match.params.provideType,
             branch:[],
-            provider:"",
             activePage: 0,
             itemsCountPerPage: 12,
             totalItemsCount: 0,
             pageRangeDisplayed: 5,
+            productType:this.props.match.params.category,
+            search:this.props.match.params.search,
             product: [
+                {
+                    id: null, productName: "", productInfo: [], productType: "", imageProduct: "", providerName: "",
+                    prices: { unitPrice: null },
+                    promotions: [{ amount: null }],
+                    productDetail: null
+                }
+            ],
+            productTop: [
                 {
                     id: null, productName: "", productInfo: [], productType: "", imageProduct: "", providerName: "",
                     prices: { unitPrice: null },
@@ -42,8 +52,32 @@ class ProductCategory extends Component {
 
 
     getAllProduction = async () => {
-       
-        const product = await axios.get(API_BASE_URL + `/product/getProductCate?cate=${this.state.cate}&&page=0&size=${this.state.itemsCountPerPage}&&provider=${this.state.provider}`)
+        let product=null
+        if(this.props.match.params.search===undefined){
+         product = await axios.get(API_BASE_URL + `/product/getProductTag?page=0&size=${this.state.itemsCountPerPage}&&provider=${this.state.provider}&&productType=${this.props.match.params.provideType}`)
+            .then(function (response) {
+                console.log("response:", response.data);
+                if (response.status === 200) {
+                    return response.data.content
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }else{
+            product = await axios.get(API_BASE_URL + `/product/smartSearch?search=${this.props.match.params.search}`)
+            .then(function (response) {
+                console.log("responseKK:", response.data);
+                if (response.status === 200) {
+                    return response.data
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+  
+        const productTop = await axios.get(API_BASE_URL + "/product/getProductStatus?page=0&size=6&&status=1")
             .then(function (response) {
                 console.log("response:", response.data);
                 if (response.status === 200) {
@@ -54,14 +88,17 @@ class ProductCategory extends Component {
                 console.log(error);
             });
         this.setState({ 
-            product: product.content,
-            totalItemsCount:product.totalElements
+            product: product,
+            totalItemsCount:product.totalElements,
+            productTop: productTop.content
          })
     }
     getAllBranch= async() =>{
-        const branch = await axios.get(API_BASE_URL + `/product/getAllBranch?cate=${this.state.cate}`)
+        console.log("0001",this.state.provideType)
+        console.log("0002",this.state.provider)
+        const branch = await axios.get(API_BASE_URL + `/product/getAllBranch?provider=${this.state.provider}&&type=${this.state.provideType}`)
         .then(function (response) {
-           
+           console.log("0000",response.data)
             if (response.status === 200) {
                 return response.data
             }
@@ -69,11 +106,12 @@ class ProductCategory extends Component {
         .catch(function (error) {
             console.log(error);
         });
-     
+     console.log("branck",branch)
     this.setState({branch})
     }
     
     handlePageChange = async(pageNumber)=> {
+        
         const cate = this.props.match.params.category
         const product = await axios.get(API_BASE_URL + `/product/getProductCate?cate=${cate}&&page=${pageNumber}&size=${this.state.itemsCountPerPage}&provider=${this.state.provider}`)
             .then(function (response) {
@@ -93,8 +131,8 @@ class ProductCategory extends Component {
          
       }
     render() {
-        console.log("KKK",this.state.provider)
-        const category = this.props.match.params.category
+        const category = this.state.category
+        console.log("Pro",this.state.product)
         const listProduct = this.state.product.map((a) =>
             <div class="col-md-4 col-xs-6">
                 <div class="product">
@@ -131,7 +169,7 @@ class ProductCategory extends Component {
         </label>
     </div>
         )
-        const advantis = this.state.product.map((a) =>
+        const advantis = this.state.productTop.map((a) =>
             <div class="product-widget">
                 <div class="product-img" onClick={() => this.sendData(a.id)}>
                     <img src={a.imageProduct} alt="" />

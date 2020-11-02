@@ -15,7 +15,11 @@ class Product extends Component {
       newProduct: [
         {
           id:null,  productName:"",productInfo:"", productType:"", imageProduct:"", providerName:"", 
-         prices:[  	{unitPrice:null}], 
+         prices:[  	{
+           unitPrice:null,
+           oldPrice:null,
+           discout:null,
+          }], 
          promotions:[{ amount:null} ], 
 		 productDetail:null
         }
@@ -27,7 +31,7 @@ componentDidMount(){
   this.getAllProduction();
 }
 handlePageChange = async(pageNumber)=> {
-  const newProduct = await axios.get(API_BASE_URL + '/product/getAllProduct'+"?size="+this.state.itemsCountPerPage+"&page="+pageNumber)
+  const newProduct = await axios.get(API_BASE_URL + '/product/getProductStatus'+"?size="+this.state.itemsCountPerPage+"&page="+pageNumber+"&status=1")
   .then(function (response) {
     if (response.status === 200) {
       return response.data
@@ -43,7 +47,7 @@ handlePageChange = async(pageNumber)=> {
 }
   getAllProduction = async() => {
    
-    const newProduct =  await axios.get(API_BASE_URL + '/product/getAllProduct'+"?size="+this.state.itemsCountPerPage+"&page=0")
+    const newProduct =  await axios.get(API_BASE_URL + '/product/getProductStatus'+"?size="+this.state.itemsCountPerPage+"&page=0"+"&status=1")
     .then(function (response) {
      
       if (response.status === 200) {
@@ -94,8 +98,8 @@ handlePageChange = async(pageNumber)=> {
         <div className="product-img" onClick={() =>this.sendData(a.id)} >
           <img src={a.imageProduct} alt=""></img>
           <div className="product-label">
-            <span className="sale">-30%</span>
-            <span className="new">NEW</span>
+  <span className="new">-{a.prices.discout}%</span>
+            <span className="sale">NEW</span>
           </div>
         </div>
         <div className="product-body">
@@ -107,7 +111,7 @@ handlePageChange = async(pageNumber)=> {
             <i className="fa fa-star"></i>
           </div>
           <h3 className="product-name"><a href="#">{a.productName}</a></h3>
-          <h4 className="product-price">{a.prices.unitPrice}đ <del class="product-old-price">{a.prices.unitPrice}đ</del></h4>
+          <h4 className="product-price">{a.prices.unitPrice}đ <del class="product-old-price">{a.prices.oldPrice}đ</del></h4>
         </div>
       </div>
     );

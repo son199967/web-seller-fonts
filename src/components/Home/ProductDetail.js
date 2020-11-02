@@ -29,7 +29,7 @@ class ProductDetail extends Component {
 		 ], 
 		 productDetail :{
 			content:"",
-			discription:"",
+			discription:[],
 			color:[],
 			size:[],
 			images:[]
@@ -121,6 +121,9 @@ getProductById = async() => {
                     <img src={s} />
                     
                 </div>
+	  )
+	  const dis = this.state.product.productDetail.discription.map((s) =>
+	  <p>{s}</p>
 	  )
 	  console.log("cartItem",this.state.cartIteam)
     return (
@@ -214,7 +217,7 @@ getProductById = async() => {
 								<div id="tab1" className="tab-pane fade in active">
 									<div className="row">
 										<div className="col-md-12">
-                        	<p>{this.state.product.productDetail.discription}</p>
+                        	<p>{dis}</p>
 										</div>
 									</div>
 								</div>
